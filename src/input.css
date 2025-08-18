@@ -1,6 +1,36 @@
+/* src/input.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-html, body { height: 100%; }
-body { background: theme(colors.paper); }
+/* ------- Pebble components ------- */
+@layer components {
+  /* Card wrapper */
+  .card {
+    @apply bg-paper rounded-2xl border-4 border-[#E1D7C2] shadow-pebble p-5 transition transform;
+  }
+  .card:hover {
+    @apply -translate-y-0.5 shadow-pebble-hover border-[#D9CCB1];
+  }
+
+  /* Icon “nest” pads for friendliness */
+  .icon-nest {
+    @apply rounded-full flex items-center justify-center;
+  }
+  .icon-nest-teal   { @apply bg-pebbleTeal/10 h-14 w-14; }
+  .icon-nest-blue   { @apply bg-gentleBlue/10 h-14 w-14; }
+  .icon-nest-yellow { @apply bg-softYellow/10 h-14 w-14; }
+
+  /* Status chips */
+  .chip       { @apply text-xs md:text-sm font-semibold rounded-full px-3 py-1; }
+  .chip-warn  { @apply bg-[#EFE6D3] text-charcoal; }         /* Not started */
+  .chip-info  { @apply bg-gentleBlue/20 text-charcoal/80; }  /* In progress */
+  .chip-ok    { @apply bg-green-200 text-green-900; }        /* Completed (later) */
+
+  /* Progress bars */
+  .progress-track { @apply h-2.5 w-full rounded-full bg-[#EADFC7]; }
+  .progress-fill  { @apply h-2.5 rounded-full; }
+  .progress-fill-teal   { @apply bg-pebbleTeal; }
+  .progress-fill-blue   { @apply bg-gentleBlue; }
+  .progress-fill-yellow { @apply bg-softYellow; }
+}
