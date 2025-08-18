@@ -2,37 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ---- Subtle paper texture for the whole page ---- */
+/* ---- Slightly more visible paper texture ---- */
 @layer base {
   body {
     background-color: #FFFCF2;
+    /* dialed up a touch: a bit denser + a bit more alpha */
     background-image:
-      radial-gradient(circle at 1px 1px, rgba(0,0,0,0.03) 1px, transparent 0),
-      radial-gradient(circle at 0.5px 0.5px, rgba(0,0,0,0.02) 1px, transparent 0);
-    background-size: 24px 24px, 18px 18px;
+      radial-gradient(circle at 1px 1px, rgba(0,0,0,0.05) 1px, transparent 0),
+      radial-gradient(circle at 0.5px 0.5px, rgba(0,0,0,0.035) 1px, transparent 0);
+    background-size: 20px 20px, 14px 14px;
     background-blend-mode: multiply;
   }
 }
 
 /* -------- Pebble components -------- */
 @layer components {
-  /* Card */
+  /* Card (thicker border, soft shadow, gentle lift) */
   .card {
-    @apply bg-paper rounded-2xl border-4 border-[#E1D7C2] shadow-pebble p-5 transition transform;
+    border: 5px solid #E1D7C2;                 /* thicker line */
+    @apply bg-paper rounded-2xl shadow-pebble p-5 transition transform;
   }
   .card:hover {
-    @apply -translate-y-0.5 shadow-pebble-hover border-[#D9CCB1];
-    /* tiny warm tint on hover */
-    background-color: rgba(255, 252, 242, 0.9);
+    border-color: #D9CCB1;
+    @apply -translate-y-0.5 shadow-pebble-hover;
+    background-color: rgba(255, 252, 242, 0.92); /* tiny warm tint */
   }
 
-  /* Icon nests (bigger) */
-.icon-nest {
-  @apply rounded-full flex items-center justify-center;
-}
-.icon-nest-teal  { height: 4rem; width: 4rem; background-color: rgba(150, 182, 182, 0.12); }  /* pebbleTeal @ 12% */
-.icon-nest-blue  { height: 4rem; width: 4rem; background-color: rgba(108, 166, 193, 0.12); }  /* gentleBlue @ 12% */
-.icon-nest-yellow{ height: 4rem; width: 4rem; background-color: rgba(233, 196, 106, 0.14); }  /* softYellow @ 14% */
+  /* Icon nests — larger, friendly pads */
+  .icon-nest {
+    @apply rounded-full flex items-center justify-center;
+  }
+  /* use plain CSS for size + tinted fills to avoid @apply+opacity issues */
+  .icon-nest-teal   { height: 72px; width: 72px; background-color: rgba(150,182,182,0.12); }
+  .icon-nest-blue   { height: 72px; width: 72px; background-color: rgba(108,166,193,0.12); }
+  .icon-nest-yellow { height: 72px; width: 72px; background-color: rgba(233,196,106,0.14); }
 
   /* Status chips */
   .chip       { @apply text-xs md:text-sm font-semibold rounded-full px-3 py-1; }
@@ -46,4 +49,11 @@
   .progress-fill-teal   { @apply bg-pebbleTeal; }
   .progress-fill-blue   { @apply bg-gentleBlue; }
   .progress-fill-yellow { @apply bg-softYellow; }
+
+  /* Subtle “premium” gloss overlay for any progress fill */
+  .progress-gloss {
+    background-image: linear-gradient(to bottom, rgba(255,255,255,0.25), rgba(255,255,255,0));
+    background-blend-mode: overlay;
+  }
 }
+
