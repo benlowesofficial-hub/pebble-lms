@@ -27,12 +27,12 @@
   }
 
   /* Icon nests (bigger) */
-  .icon-nest {
-    @apply rounded-full flex items-center justify-center;
-  }
-  .icon-nest-teal   { @apply bg-pebbleTeal/12 h-16 w-16; }
-  .icon-nest-blue   { @apply bg-gentleBlue/12 h-16 w-16; }
-  .icon-nest-yellow { @apply bg-softYellow/14 h-16 w-16; }
+.icon-nest {
+  @apply rounded-full flex items-center justify-center;
+}
+.icon-nest-teal  { height: 4rem; width: 4rem; background-color: rgba(150, 182, 182, 0.12); }  /* pebbleTeal @ 12% */
+.icon-nest-blue  { height: 4rem; width: 4rem; background-color: rgba(108, 166, 193, 0.12); }  /* gentleBlue @ 12% */
+.icon-nest-yellow{ height: 4rem; width: 4rem; background-color: rgba(233, 196, 106, 0.14); }  /* softYellow @ 14% */
 
   /* Status chips */
   .chip       { @apply text-xs md:text-sm font-semibold rounded-full px-3 py-1; }
