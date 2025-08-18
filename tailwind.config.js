@@ -1,3 +1,4 @@
+// tailwind.config.js
 module.exports = {
   content: ["./public/**/*.html"],
   theme: {
@@ -15,8 +16,18 @@ module.exports = {
       },
       borderRadius: {
         xl2: "1.25rem"
+      },
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        }
+      },
+      animation: {
+        'fade-in': 'fadeIn 1s ease-in-out'
       }
     }
   },
   plugins: []
 }
+
