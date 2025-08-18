@@ -4,175 +4,144 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Pebble LMS — Your training</title>
-  <!-- Tailwind build -->
-  <link rel="stylesheet" href="./styles.css" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
-</head>
 
-<body class="min-h-dvh antialiased font-sans text-[16px]">
+  <!-- Nunito -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind build output -->
+  <link href="/styles.css" rel="stylesheet" />
+</head>
+<body class="min-h-screen text-charcoal font-sans antialiased">
+
   <!-- Header -->
-  <header class="sticky top-0 z-40 backdrop-blur bg-paper/80 border-b border-[#E1D7C2]/60">
-    <div class="main-wrap flex items-center gap-3 py-3">
-      <img src="./assets/PebbleLogo_ExactMatch_1024.png" alt="Pebble" class="h-7 w-auto" />
-      <span class="uppercase tracking-wide text-xs text-[#333333]/70">Compliance training</span>
+  <header class="sticky top-0 z-10 bg-paper/90 backdrop-blur border-b border-black/5">
+    <div class="mx-auto max-w-7xl px-4 py-4 flex items-center justify-between">
+      <a href="/index.html" class="flex items-center gap-3">
+        <img src="/assets/PebbleLogo.png" alt="Pebble" class="h-12 md:h-14" />
+        <span class="sr-only">Home</span>
+      </a>
+      <div class="text-sm opacity-0 select-none">.</div>
     </div>
   </header>
 
-  <!-- Main content -->
-  <main class="main-wrap pb-16">
-    <h1 class="page-title">Your training</h1>
+  <main class="mx-auto max-w-7xl px-4 py-10 md:py-14 animate-fade-in">
+    <!-- Page title -->
+    <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight mb-3">Your training</h1>
+    <p class="text-sm md:text-base opacity-70 mb-10">Everything assigned to you, kept simple. Click a card to jump back in.</p>
+    <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight mb-10">Your training</h1>
 
-    <!-- Required section -->
-    <section aria-labelledby="required-heading" class="mb-10">
-      <h2 id="required-heading" class="text-xl md:text-2xl font-extrabold text-[#333333] mb-4">Required</h2>
+    <!-- Required -->
+    <section class="mb-14">
+      <div class="mb-3">
+        <h2 class="text-3xl font-bold">Required</h2>
+        <p class="text-sm opacity-60 mt-1">Assigned by your organisation.</p>
+      </div>
+      <h2 class="text-3xl font-bold mb-6">Required</h2>
 
-      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-2">
-        <!-- Card 1 -->
-        <a href="#" class="card block">
-          <div class="flex items-start gap-4">
-            <div class="icon-nest icon-nest-teal">
-              <img src="./assets/lock.png" alt="" class="h-7 w-7" />
-            </div>
-            <div class="flex-1">
-              <div class="flex items-start justify-between gap-3">
-                <h3 class="text-lg md:text-xl font-bold text-[#333333]">GDPR Basics</h3>
-                <span class="chip chip-info">In progress</span>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+        <!-- Card: Fire Safety -->
+        <a href="/course-fire-safety.html" class="group block focus:outline-none focus-visible:ring-4 focus-visible:ring-pebbleTeal/30 rounded-2xl">
+          <article class="card">
+            <div class="flex items-start justify-between gap-6">
+              <h3 class="text-[22px] font-extrabold leading-tight">Fire Safety</h3>
+
+              <!-- Bigger icon nest -->
+              <div class="icon-nest icon-nest-yellow">
+                <img src="/assets/icons/fire.png" alt="" class="h-12 w-12 object-contain" />
+              <!-- Larger icon, nudged inward/down -->
+              <div class="icon-nest icon-nest-yellow mt-2 mr-2">
+                <img src="/assets/icons/fire.png" alt="" class="h-14 w-14 object-contain" />
               </div>
-              <p class="mt-1 text-sm text-[#333333]/80">~12 min</p>
-              <div class="mt-4">
-                <div class="progress-track">
-                  <div class="progress-fill progress-fill-teal progress-gloss w-[45%]"></div>
-                </div>
-              </div>
             </div>
-          </div>
-        </a>
 
-        <!-- Card 2 -->
-        <a href="#" class="card block">
-          <div class="flex items-start gap-4">
-            <div class="icon-nest icon-nest-yellow">
-              <img src="./assets/fire.png" alt="" class="h-7 w-7" />
-            </div>
-            <div class="flex-1">
-              <div class="flex items-start justify-between gap-3">
-                <h3 class="text-lg md:text-xl font-bold text-[#333333]">Workplace Safety</h3>
+            <div class="mt-4 space-y-3">
+              <!-- progress -->
+              <div class="progress-track">
+                <div class="progress-fill progress-fill-teal" style="width:0%"></div>
+                <div class="progress-fill progress-fill-teal progress-gloss" style="width:0%"></div>
+              </div>
+
+              <!-- status + duration -->
+              <div class="flex items-center justify-between">
                 <span class="chip chip-warn">Not started</span>
-              </div>
-              <p class="mt-1 text-sm text-[#333333]/80">~10 min</p>
-              <div class="mt-4">
-                <div class="progress-track">
-                  <div class="progress-fill progress-fill-yellow progress-gloss w-[3%]"></div>
-                </div>
+                <p class="text-sm opacity-60">~10 min</p>
               </div>
             </div>
-          </div>
+          </article>
         </a>
 
-        <!-- Card 3 -->
-        <a href="#" class="card block">
-          <div class="flex items-start gap-4">
-            <div class="icon-nest icon-nest-blue">
-              <img src="./assets/persontalking.png" alt="" class="h-7 w-7" />
+        <!-- Card: GDPR Basics -->
+        <a href="/course-gdpr-basics.html" class="group block focus:outline-none focus-visible:ring-4 focus-visible:ring-pebbleTeal/30 rounded-2xl">
+          <article class="card">
+            <div class="flex items-start justify-between gap-6">
+              <h3 class="text-[22px] font-extrabold leading-tight">GDPR Basics</h3>
+
+              <div class="icon-nest icon-nest-teal">
+                <img src="/assets/icons/lock.png" alt="" class="h-12 w-12 object-contain" />
+              <div class="icon-nest icon-nest-teal mt-2 mr-2">
+                <img src="/assets/icons/lock.png" alt="" class="h-14 w-14 object-contain" />
+              </div>
             </div>
-            <div class="flex-1">
-              <div class="flex items-start justify-between gap-3">
-                <h3 class="text-lg md:text-xl font-bold text-[#333333]">Diversity & Inclusion</h3>
+
+            <div class="mt-4 space-y-3">
+              <div class="progress-track">
+                <div class="progress-fill progress-fill-blue" style="width:45%"></div>
+                <div class="progress-fill progress-fill-blue progress-gloss" style="width:45%"></div>
+              </div>
+
+              <div class="flex items-center justify-between">
                 <span class="chip chip-info">In progress</span>
-              </div>
-              <p class="mt-1 text-sm text-[#333333]/80">~8 min</p>
-              <div class="mt-4">
-                <div class="progress-track">
-                  <div class="progress-fill progress-fill-blue progress-gloss w-[30%]"></div>
-                </div>
+                <p class="text-sm opacity-60">~12 min</p>
               </div>
             </div>
-          </div>
+          </article>
         </a>
 
-        <!-- Card 4 -->
-        <a href="#" class="card block">
-          <div class="flex items-start gap-4">
-            <div class="icon-nest icon-nest-teal">
-              <img src="./assets/lock.png" alt="" class="h-7 w-7" />
-            </div>
-            <div class="flex-1">
-              <div class="flex items-start justify-between gap-3">
-                <h3 class="text-lg md:text-xl font-bold text-[#333333]">Data Handling</h3>
-                <span class="chip chip-warn">Not started</span>
-              </div>
-              <p class="mt-1 text-sm text-[#333333]/80">~6 min</p>
-              <div class="mt-4">
-                <div class="progress-track">
-                  <div class="progress-fill progress-fill-teal progress-gloss w-[3%]"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </a>
+        <div class="hidden lg:block"></div>
       </div>
     </section>
 
-    <!-- Optional section with quiet delimiter -->
-    <section aria-labelledby="optional-heading" class="section-delimiter">
-      <h2 id="optional-heading" class="text-xl md:text-2xl font-extrabold text-[#333333] mb-4">Optional</h2>
+    <!-- Optional -->
+    <section>
+      <div class="mb-3">
+        <h2 class="text-3xl font-bold">Optional</h2>
+        <p class="text-sm opacity-60 mt-1">Nice-to-have extras.</p>
+      </div>
+      <h2 class="text-3xl font-bold mb-6">Optional</h2>
 
-      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-2">
-        <!-- Card A -->
-        <a href="#" class="card block">
-          <div class="flex items-start gap-4">
-            <div class="icon-nest icon-nest-blue">
-              <img src="./assets/persontalking.png" alt="" class="h-7 w-7" />
-            </div>
-            <div class="flex-1">
-              <div class="flex items-start justify-between gap-3">
-                <h3 class="text-lg md:text-xl font-bold text-[#333333]">Better Meetings</h3>
-                <span class="chip chip-warn">Not started</span>
-              </div>
-              <p class="mt-1 text-sm text-[#333333]/80">~9 min</p>
-              <div class="mt-4">
-                <div class="progress-track">
-                  <div class="progress-fill progress-fill-blue progress-gloss w-[3%]"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </a>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+        <a href="/course-phishing.html" class="group block focus:outline-none focus-visible:ring-4 focus-visible:ring-pebbleTeal/30 rounded-2xl">
+          <article class="card">
+            <div class="flex items-start justify-between gap-6">
+              <h3 class="text-[22px] font-extrabold leading-tight">Phishing Awareness</h3>
 
-        <!-- Card B -->
-        <a href="#" class="card block">
-          <div class="flex items-start gap-4">
-            <div class="icon-nest icon-nest-yellow">
-              <img src="./assets/fire.png" alt="" class="h-7 w-7" />
-            </div>
-            <div class="flex-1">
-              <div class="flex items-start justify-between gap-3">
-                <h3 class="text-lg md:text-xl font-bold text-[#333333]">Office Ergonomics</h3>
-                <span class="chip chip-info">In progress</span>
-              </div>
-              <p class="mt-1 text-sm text-[#333333]/80">~7 min</p>
-              <div class="mt-4">
-                <div class="progress-track">
-                  <div class="progress-fill progress-fill-yellow progress-gloss w-[20%]"></div>
-                </div>
+              <div class="icon-nest icon-nest-yellow">
+                <img src="/assets/icons/speech.png" alt="" class="h-12 w-12 object-contain" />
+              <div class="icon-nest icon-nest-yellow mt-2 mr-2">
+                <img src="/assets/icons/speech.png" alt="" class="h-14 w-14 object-contain" />
               </div>
             </div>
-          </div>
+
+            <div class="mt-4 space-y-3">
+              <div class="progress-track">
+                <div class="progress-fill progress-fill-yellow" style="width:0%"></div>
+                <div class="progress-fill progress-fill-yellow progress-gloss" style="width:0%"></div>
+              </div>
+
+              <div class="flex items-center justify-between">
+                <span class="chip bg-charcoal/5">Not started</span>
+                <p class="text-sm opacity-60">~8 min</p>
+              </div>
+            </div>
+          </article>
         </a>
       </div>
     </section>
   </main>
 
-  <!-- Footer (optional minimal) -->
-  <footer class="mt-12 pb-10">
-    <div class="main-wrap text-xs text-[#333333]/60">
-      © <span id="year"></span> Pebble. All rights reserved.
-    </div>
+  <footer class="mt-16 pb-10 text-center text-sm opacity-60">
+    © <span id="year"></span> PebbleLMS
+    <script>document.getElementById('year').textContent = new Date().getFullYear()</script>
   </footer>
-
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-  </script>
 </body>
 </html>
