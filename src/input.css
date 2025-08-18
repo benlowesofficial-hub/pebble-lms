@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---- Subtle paper texture for the whole page ---- */
+@layer base {
+  body {
+    /* Very faint warm noise using layered gradients (no image asset needed) */
+    background-color: #FFFCF2;
+    background-image:
+      radial-gradient( circle at 1px 1px, rgba(0,0,0,0.03) 1px, transparent 0 ),
+      radial-gradient( circle at 0.5px 0.5px, rgba(0,0,0,0.02) 1px, transparent 0 );
+    background-size: 24px 24px, 18px 18px;
+    background-blend-mode: multiply;
+  }
+}
+
+/* -------- Pebble components -------- */
+@layer components {
+  /* Card */
+  .card {
+    @apply bg-paper rounded-2xl border-4 border-[#E1D7C2] shadow-[0_2px_0_rgba(0,0,0,0.04),0_10px_30px_rgba(0,0,0,0.04)] p-5 transition transform;
+  }
+  .card:hover {
+    @apply -translate-y-0.5 shadow-[0_3px_0_rgba(0,0,0,0.05),0_16px_40px_rgba(0,0,0,0.08)];
+    background-color: rgba(255,252,242,0.9); /* tiny warm tint on hover */
+    border-color: #D9CCB1;
+  }
+
+  /* Icon nests (bigger) */
+  .icon-nest {
+    @apply rounded-full flex items-center justify-center;
+  }
+  .icon-nest-teal   { @apply bg-pebbleTeal/12 h-16 w-16; }
+  .icon-nest-blue   { @apply bg-gentleBlue/12 h-16 w-16; }
+  .icon-nest-yellow { @apply bg-softYellow/14 h-16 w-16; }
+
+  /* Status chips */
+  .chip       { @apply text-xs md:text-sm font-semibold rounded-full px-3 py-1; }
+  .chip-warn  { @apply bg-[#EFE6D3] text-charcoal; }         /* Not started */
+  .chip-info  { @apply bg-gentleBlue/20 text-charcoal/80; }  /* In progress */
+  .chip-ok    { @apply bg-green-200 text-green-900; }        /* Completed (future) */
+
+  /* Progress bars */
+  .progress-track { @apply h-2.5 w-full rounded-full bg-[#EADFC7]; }
+  .progress-fill  { @apply h-2.5 rounded-full; }
+  .progress-fill-teal   { @apply bg-pebbleTeal; }
+  .progress-fill-blue   { @apply bg-gentleBlue; }
+  .progress-fill-yellow { @apply bg-softYellow; }
+}
