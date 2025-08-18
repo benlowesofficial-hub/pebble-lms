@@ -13,6 +13,32 @@
     background-size: 20px 20px, 14px 14px;
     background-blend-mode: multiply;
   }
+
+  /* Page title: tighter tracking + a bit closer to content for more presence */
+  .page-title {
+    font-weight: 800;              /* strong but friendly */
+    letter-spacing: -0.0125em;     /* subtle tightening */
+    color: #333333;                /* charcoal */
+    margin-top: 0.25rem;           /* slightly less top margin */
+    margin-bottom: 0.75rem;        /* sits “with” the content */
+    line-height: 1.1;
+  }
+
+  /* Main column wrapper: narrows desktop width to reduce airy gaps */
+  .main-wrap {
+    width: 100%;
+    max-width: 1100px;             /* intentional column width */
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;            /* gentle gutter */
+    padding-right: 1rem;
+  }
+
+  @media (min-width: 1280px) {
+    .main-wrap {
+      max-width: 1040px;           /* a touch narrower on very wide screens */
+    }
+  }
 }
 
 /* -------- Pebble components -------- */
@@ -54,6 +80,28 @@
   .progress-gloss {
     background-image: linear-gradient(to bottom, rgba(255,255,255,0.25), rgba(255,255,255,0));
     background-blend-mode: overlay;
+  }
+
+  /* Quiet section delimiter for the Optional block:
+     Adds a very subtle separator line and spacing above the section */
+  .section-delimiter {
+    position: relative;
+    padding-top: 1.25rem;          /* breathing space above the heading */
+    margin-top: 0.5rem;
+  }
+  .section-delimiter::before {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      rgba(225,215,194,0),         /* fade-in */
+      rgba(225,215,194,0.9),
+      rgba(225,215,194,0)          /* fade-out */
+    ); /* uses the card border tone (#E1D7C2) */
+    transform: translateZ(0);      /* crisp rendering */
   }
 }
 
