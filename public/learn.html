@@ -1,68 +1,117 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Your Training</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pebble LMS — Your training</title>
+
+  <!-- Nunito -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind build output -->
+  <link href="/styles.css" rel="stylesheet" />
 </head>
-<body class="bg-paper font-sans text-charcoal">
+<body class="min-h-screen bg-paper text-charcoal font-sans antialiased">
+
   <!-- Header -->
-  <header class="flex items-center p-6 border-b border-gray-200/40">
-    <img src="logo.svg" alt="Pebble Logo" class="h-6 w-auto mr-2">
-    <span class="font-bold text-lg">Pebble</span>
+  <header class="sticky top-0 z-10 bg-paper/90 backdrop-blur border-b border-black/5">
+    <div class="mx-auto max-w-7xl px-4 py-4 flex items-center justify-between">
+      <a href="/index.html" class="flex items-center gap-3">
+        <img src="/assets/PebbleLogo.png" alt="Pebble" class="h-12 md:h-14" />
+        <span class="sr-only">Home</span>
+      </a>
+      <div class="text-sm opacity-0 select-none">.</div>
+    </div>
   </header>
 
-  <!-- Main -->
-  <main class="max-w-6xl mx-auto px-6 py-12">
-    <h1 class="text-4xl font-extrabold mb-8">Your training</h1>
+  <main class="mx-auto max-w-7xl px-4 py-10 md:py-14 animate-fade-in">
+    <!-- Page title -->
+    <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight mb-12">Your training</h1>
 
-    <!-- Required section -->
+    <!-- Required -->
+    <section class="mb-16">
+      <h2 class="text-3xl font-bold mb-6">Required</h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+        <!-- Card: Fire Safety -->
+        <a href="/course-fire-safety.html" class="group block focus:outline-none focus-visible:ring-4 focus-visible:ring-pebbleTeal/30 rounded-2xl">
+          <article class="bg-paper rounded-2xl border-4 border-[#E1D7C2] shadow-sm p-5 transition
+                          group-hover:-translate-y-0.5 group-hover:shadow-md group-hover:border-[#D9CCB1]">
+            <div class="flex items-start justify-between gap-6">
+              <h3 class="text-2xl font-extrabold leading-tight">Fire Safety</h3>
+              <img src="/assets/icons/fire.png" alt="" class="h-20 w-20 md:h-24 md:w-24 object-contain" />
+            </div>
+
+            <div class="mt-5 space-y-3">
+              <!-- progress -->
+              <div aria-label="Progress" class="h-2.5 w-full rounded-full bg-[#EADFC7]">
+                <div class="h-2.5 rounded-full bg-pebbleTeal" style="width:0%"></div>
+              </div>
+              <!-- status + duration -->
+              <div class="flex items-center justify-between">
+                <span class="text-xs md:text-sm font-semibold rounded-full px-3 py-1 bg-charcoal/5">Not started</span>
+                <p class="text-sm opacity-70">~10 min</p>
+              </div>
+            </div>
+          </article>
+        </a>
+
+        <!-- Card: GDPR Basics -->
+        <a href="/course-gdpr-basics.html" class="group block focus:outline-none focus-visible:ring-4 focus-visible:ring-pebbleTeal/30 rounded-2xl">
+          <article class="bg-paper rounded-2xl border-4 border-[#E1D7C2] shadow-sm p-5 transition
+                          group-hover:-translate-y-0.5 group-hover:shadow-md group-hover:border-[#D9CCB1]">
+            <div class="flex items-start justify-between gap-6">
+              <h3 class="text-2xl font-extrabold leading-tight">GDPR Basics</h3>
+              <img src="/assets/icons/lock.png" alt="" class="h-20 w-20 md:h-24 md:w-24 object-contain" />
+            </div>
+
+            <div class="mt-5 space-y-3">
+              <div aria-label="Progress" class="h-2.5 w-full rounded-full bg-[#EADFC7]">
+                <div class="h-2.5 rounded-full bg-gentleBlue" style="width:45%"></div>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-xs md:text-sm font-semibold rounded-full px-3 py-1 bg-gentleBlue/20 text-charcoal/80">In progress</span>
+                <p class="text-sm opacity-70">~12 min</p>
+              </div>
+            </div>
+          </article>
+        </a>
+
+        <div class="hidden lg:block"></div>
+      </div>
+    </section>
+
+    <!-- Optional -->
     <section>
-      <h2 class="text-2xl font-bold mb-6">Required</h2>
+      <h2 class="text-3xl font-bold mb-6">Optional</h2>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        
-        <!-- Card 1 -->
-        <a href="#" class="bg-paper rounded-2xl shadow-md hover:shadow-xl transition p-6 flex flex-col justify-between">
-          <div class="flex justify-between items-start">
-            <h3 class="text-lg font-semibold">Fire Safety</h3>
-            <div class="h-14 w-14 rounded-full bg-softYellow/30 flex items-center justify-center">
-              <img src="icons/fire.svg" alt="Fire icon" class="h-8 w-8">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+        <a href="/course-phishing.html" class="group block focus:outline-none focus-visible:ring-4 focus-visible:ring-pebbleTeal/30 rounded-2xl">
+          <article class="bg-paper rounded-2xl border-4 border-[#E1D7C2] shadow-sm p-5 transition
+                          group-hover:-translate-y-0.5 group-hover:shadow-md group-hover:border-[#D9CCB1]">
+            <div class="flex items-start justify-between gap-6">
+              <h3 class="text-2xl font-extrabold leading-tight">Phishing Awareness</h3>
+              <img src="/assets/icons/speech.png" alt="" class="h-20 w-20 md:h-24 md:w-24 object-contain" />
             </div>
-          </div>
-          <div class="mt-6">
-            <div class="w-full bg-gray-200 rounded-full h-2 mb-3">
-              <div class="bg-softYellow h-2 rounded-full" style="width: 0%;"></div>
+
+            <div class="mt-5 space-y-3">
+              <div aria-label="Progress" class="h-2.5 w-full rounded-full bg-[#EADFC7]">
+                <div class="h-2.5 rounded-full bg-softYellow" style="width:0%"></div>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-xs md:text-sm font-semibold rounded-full px-3 py-1 bg-charcoal/5">Not started</span>
+                <p class="text-sm opacity-70">~8 min</p>
+              </div>
             </div>
-            <div class="flex justify-between items-center text-sm">
-              <span class="px-3 py-1 rounded-full bg-softYellow/40 text-charcoal">Not started</span>
-              <span class="text-gray-500">10 mins</span>
-            </div>
-          </div>
+          </article>
         </a>
-
-        <!-- Card 2 -->
-        <a href="#" class="bg-paper rounded-2xl shadow-md hover:shadow-xl transition p-6 flex flex-col justify-between">
-          <div class="flex justify-between items-start">
-            <h3 class="text-lg font-semibold">GDPR Basics</h3>
-            <div class="h-14 w-14 rounded-full bg-gentleBlue/30 flex items-center justify-center">
-              <img src="icons/lock.svg" alt="Lock icon" class="h-8 w-8">
-            </div>
-          </div>
-          <div class="mt-6">
-            <div class="w-full bg-gray-200 rounded-full h-2 mb-3">
-              <div class="bg-gentleBlue h-2 rounded-full" style="width: 60%;"></div>
-            </div>
-            <div class="flex justify-between items-center text-sm">
-              <span class="px-3 py-1 rounded-full bg-gentleBlue/30 text-charcoal">In progress</span>
-              <span class="text-gray-500">12 mins</span>
-            </div>
-          </div>
-        </a>
-
       </div>
     </section>
   </main>
+
+  <footer class="mt-16 pb-10 text-center text-sm opacity-60">
+    © <span id="year"></span> PebbleLMS
+    <script>document.getElementById('year').textContent = new Date().getFullYear()</script>
+  </footer>
 </body>
 </html>
