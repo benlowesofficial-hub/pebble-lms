@@ -5,11 +5,10 @@
 /* ---- Subtle paper texture for the whole page ---- */
 @layer base {
   body {
-    /* Very faint warm noise using layered gradients (no image asset needed) */
     background-color: #FFFCF2;
     background-image:
-      radial-gradient( circle at 1px 1px, rgba(0,0,0,0.03) 1px, transparent 0 ),
-      radial-gradient( circle at 0.5px 0.5px, rgba(0,0,0,0.02) 1px, transparent 0 );
+      radial-gradient(circle at 1px 1px, rgba(0,0,0,0.03) 1px, transparent 0),
+      radial-gradient(circle at 0.5px 0.5px, rgba(0,0,0,0.02) 1px, transparent 0);
     background-size: 24px 24px, 18px 18px;
     background-blend-mode: multiply;
   }
@@ -19,12 +18,12 @@
 @layer components {
   /* Card */
   .card {
-    @apply bg-paper rounded-2xl border-4 border-[#E1D7C2] shadow-[0_2px_0_rgba(0,0,0,0.04),0_10px_30px_rgba(0,0,0,0.04)] p-5 transition transform;
+    @apply bg-paper rounded-2xl border-4 border-[#E1D7C2] shadow-pebble p-5 transition transform;
   }
   .card:hover {
-    @apply -translate-y-0.5 shadow-[0_3px_0_rgba(0,0,0,0.05),0_16px_40px_rgba(0,0,0,0.08)];
-    background-color: rgba(255,252,242,0.9); /* tiny warm tint on hover */
-    border-color: #D9CCB1;
+    @apply -translate-y-0.5 shadow-pebble-hover border-[#D9CCB1];
+    /* tiny warm tint on hover */
+    background-color: rgba(255, 252, 242, 0.9);
   }
 
   /* Icon nests (bigger) */
