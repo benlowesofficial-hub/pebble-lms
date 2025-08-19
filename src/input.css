@@ -2,80 +2,58 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ---- Page background: soft off‑white with a whisper of teal + light texture ---- */
+/* --- Slightly more visible paper speckle (keeps the playful Pebble DNA) --- */
 @layer base {
   body {
-    /* modern, non-beige paper with faint teal cast */
-    background:
-      radial-gradient(circle at 1.5px 1.5px, rgba(0,0,0,0.035) 1px, transparent 1.5px),
-      radial-gradient(circle at 0.75px 0.75px, rgba(0,0,0,0.02) 1px, transparent 1px),
-      linear-gradient(180deg, #FFFFFF 0%, rgba(150,182,182,0.08) 100%);
-    background-size: 22px 22px, 18px 18px, 100% 100%;
-    background-color: #FAFCFB; /* subtle cool-neutral base */
-    color: theme('colors.charcoal');
+    /* the page wrapper now adds a warm→cool gradient; this texture stays very light */
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(0,0,0,0.04) 1px, transparent 0),
+      radial-gradient(circle at 0.5px 0.5px, rgba(0,0,0,0.03) 1px, transparent 0);
+    background-size: 22px 22px, 16px 16px;
+    background-blend-mode: multiply;
   }
 }
 
 /* -------- Pebble components -------- */
 @layer components {
-  /* Title tweak */
-  .page-title {
-    @apply font-extrabold tracking-tighter leading-tight;
-    letter-spacing: -0.01em;
-  }
-
-  /* Card — softer + more modern depth */
+  /* Card: thicker border, soft shadow, gentle lift */
   .card {
-    @apply bg-white rounded-2xl border border-black/10 shadow-[0_1px_0_rgba(0,0,0,0.03),0_6px_16px_rgba(0,0,0,0.06)] p-6 transition;
+    border: 5px solid #E1D7C2;
+    @apply bg-white/90 rounded-2xl shadow-pebble p-6 transition transform;
+    /* a whisper of inner padding tint on hover for premium feel */
   }
   .card:hover {
-    @apply -translate-y-0.5 shadow-[0_2px_0_rgba(0,0,0,0.03),0_10px_24px_rgba(0,0,0,0.10)];
+    border-color: #D9CCB1;
+    @apply -translate-y-0.5 shadow-pebble-hover bg-white;
   }
 
-  /* Bigger, friendlier icon nests (soft tinted circles) */
+  /* Bigger, friendlier icon nests (pads behind the icon) */
   .icon-nest {
     @apply rounded-full flex items-center justify-center;
-    height: 88px;
-    width: 88px;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.75);
   }
-  .icon-nest-teal   { background: rgba(150,182,182,0.18); }
-  .icon-nest-blue   { background: rgba(108,166,193,0.18); }
-  .icon-nest-yellow { background: rgba(233,196,106,0.20); }
+  .icon-nest-teal   { height: 88px; width: 88px; background-color: rgba(150,182,182,0.20); }
+  .icon-nest-blue   { height: 88px; width: 88px; background-color: rgba(108,166,193,0.20); }
+  .icon-nest-yellow { height: 88px; width: 88px; background-color: rgba(233,196,106,0.24); }
 
-  /* Status chips */
+  /* Chips */
   .chip       { @apply text-xs md:text-sm font-semibold rounded-full px-3 py-1; }
-  .chip-warn  { @apply bg-[#EFE6D3] text-charcoal; }         /* Not started */
-  .chip-info  { @apply bg-gentleBlue/20 text-charcoal/80; }  /* In progress */
-  .chip-ok    { @apply bg-green-200 text-green-900; }        /* Completed */
+  .chip-warn  { @apply bg-[#EFE6D3] text-charcoal; }
+  .chip-info  { @apply bg-gentleBlue/20 text-charcoal/80; }
+  .chip-ok    { @apply bg-green-200 text-green-900; }
 
-  /* Progress bars (track + glossy gradient fills) */
-  .progress-track { 
-    @apply h-2.5 w-full rounded-full bg-black/10;
-    box-shadow: inset 0 1px 2px rgba(0,0,0,0.06);
-  }
-  .progress-fill  { 
-    @apply h-2.5 rounded-full;
-    box-shadow: inset 0 0 1px rgba(255,255,255,0.35), 0 1px 0 rgba(255,255,255,0.35);
-  }
-  .progress-fill-teal   { background: linear-gradient(90deg, #96B6B6 0%, #7FA3A3 100%); }
-  .progress-fill-blue   { background: linear-gradient(90deg, #6CA6C1 0%, #4E8DAA 100%); }
-  .progress-fill-yellow { background: linear-gradient(90deg, #E9C46A 0%, #D6AA42 100%); }
+  /* Progress */
+  .progress-track { @apply h-2.5 w-full rounded-full bg-charcoal/10; }
+  .progress-fill  { @apply h-2.5 rounded-full; }
+  .progress-fill-teal   { @apply bg-pebbleTeal; }
+  .progress-fill-blue   { @apply bg-gentleBlue; }
+  .progress-fill-yellow { @apply bg-softYellow; }
 
-  /* Tabs: modern, friendly pills + underline */
-  .tabs {
-    @apply flex gap-2 md:gap-3 border-b border-black/10;
+  /* Subtle gloss to make progress feel tactile (premium hint) */
+  .progress-gloss {
+    background-image: linear-gradient(to bottom, rgba(255,255,255,0.25), rgba(255,255,255,0));
+    background-blend-mode: overlay;
   }
-  .tab-btn {
-    @apply -mb-px px-4 py-2 rounded-t-lg text-sm md:text-base font-semibold border-b-2 border-transparent text-charcoal/70 hover:text-charcoal hover:border-black/10 transition;
-  }
-  .tab-btn[aria-selected="true"] {
-    @apply text-charcoal border-pebbleTeal;
-    background: rgba(150,182,182,0.10);
-  }
-
-  /* Assistive */
-  .muted { @apply text-sm opacity-60; }
 }
+
 
 
