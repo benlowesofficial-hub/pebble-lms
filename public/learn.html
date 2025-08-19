@@ -13,11 +13,11 @@
 </head>
 <body class="min-h-screen font-sans antialiased">
 
-  <!-- Header (block colour) -->
-  <header class="site-header">
-    <div class="mx-auto max-w-5xl px-4 py-5 flex items-center justify-between">
-      <a href="/index.html" class="flex items-center gap-3 text-white/95 hover:text-white">
-        <img src="/assets/PebbleLogo.png" alt="Pebble" class="h-12 md:h-14 drop-shadow-sm" />
+  <!-- Header (light, subtle) -->
+  <header class="sticky top-0 z-10 bg-white/80 backdrop-blur border-b border-black/10 shadow-sm">
+    <div class="mx-auto max-w-7xl px-4 py-5 flex items-center justify-between">
+      <a href="/index.html" class="flex items-center gap-3 text-black/80 hover:text-black">
+        <img src="/assets/PebbleLogo.png" alt="Pebble" class="h-12 md:h-14" />
         <span class="sr-only">Home</span>
       </a>
       <div class="text-sm opacity-0 select-none">.</div>
@@ -33,11 +33,13 @@
 
     <!-- Tabs -->
     <nav class="mb-6" aria-label="Course filters">
-      <div class="tab-rail">
-        <!-- Active tab is controlled by aria-selected -->
+      <div class="flex items-end gap-2 border-b border-black/10">
+        <!-- Tab buttons: JS toggles the active styles below -->
         <button
           id="tab-required"
-          class="tab-btn"
+          class="px-4 py-2 -mb-px rounded-t-lg text-sm md:text-base font-semibold
+                 text-black/60 hover:text-black hover:bg-black/5
+                 border-b-2 border-transparent"
           data-tab="required"
           aria-controls="panel-required"
           aria-selected="true"
@@ -48,7 +50,9 @@
 
         <button
           id="tab-optional"
-          class="tab-btn"
+          class="px-4 py-2 -mb-px rounded-t-lg text-sm md:text-base font-semibold
+                 text-black/60 hover:text-black hover:bg-black/5
+                 border-b-2 border-transparent"
           data-tab="optional"
           aria-controls="panel-optional"
           aria-selected="false"
@@ -59,7 +63,9 @@
 
         <button
           id="tab-completed"
-          class="tab-btn"
+          class="px-4 py-2 -mb-px rounded-t-lg text-sm md:text-base font-semibold
+                 text-black/60 hover:text-black hover:bg-black/5
+                 border-b-2 border-transparent"
           data-tab="completed"
           aria-controls="panel-completed"
           aria-selected="false"
@@ -85,10 +91,10 @@
 
             <div class="mt-4 space-y-3">
               <div class="progress-track">
-                <div class="progress-fill progress-fill-teal progress-gloss" style="width:0%"></div>
+                <div class="progress-fill progress-gloss bg-black/10" style="width:0%"></div>
               </div>
               <div class="flex items-center justify-between">
-                <span class="chip chip-muted">Not started</span>
+                <span class="chip bg-black/10 text-black/70">Not started</span>
                 <p class="text-sm opacity-60">~10 min</p>
               </div>
             </div>
@@ -107,10 +113,10 @@
 
             <div class="mt-4 space-y-3">
               <div class="progress-track">
-                <div class="progress-fill progress-fill-teal progress-gloss" style="width:45%"></div>
+                <div class="progress-fill progress-gloss" style="background-color:#7FA2A2; width:45%"></div>
               </div>
               <div class="flex items-center justify-between">
-                <span class="chip chip-info">In progress</span>
+                <span class="chip" style="background-color:#E7F0F0; color:#3F6666">In progress</span>
                 <p class="text-sm opacity-60">~12 min</p>
               </div>
             </div>
@@ -133,10 +139,10 @@
 
             <div class="mt-4 space-y-3">
               <div class="progress-track">
-                <div class="progress-fill progress-fill-teal progress-gloss" style="width:0%"></div>
+                <div class="progress-fill progress-gloss bg-black/10" style="width:0%"></div>
               </div>
               <div class="flex items-center justify-between">
-                <span class="chip chip-muted">Not started</span>
+                <span class="chip bg-black/10 text-black/70">Not started</span>
                 <p class="text-sm opacity-60">~8 min</p>
               </div>
             </div>
@@ -159,24 +165,33 @@
     <script>document.getElementById('year').textContent = new Date().getFullYear()</script>
   </footer>
 
-  <!-- Minimal tab script -->
+  <!-- Tab behavior: toggles classes for active/inactive states -->
   <script>
     (function () {
-      const buttons = Array.from(document.querySelectorAll('.tab-btn'));
+      const ACTIVE_BG = 'bg-[rgba(150,182,182,0.10)]';  // light Pebble Teal wash
+      const ACTIVE_UNDERLINE = 'border-b-2 border-[#6E8E8E]'; // teal underline
+      const INACTIVE_TXT = 'text-black/60';
+      const ACTIVE_TXT = 'text-black';
+      const HOVER_BG = 'hover:bg-black/5';
+
+      const buttons = Array.from(document.querySelectorAll('[role="tab"]'));
       const panels = {
         required: document.getElementById('panel-required'),
         optional: document.getElementById('panel-optional'),
         completed: document.getElementById('panel-completed')
       };
 
-      function activate(tab) {
-        // Toggle aria-selected on buttons (CSS handles styling)
-        buttons.forEach(btn => {
-          const isActive = btn.dataset.tab === tab;
-          btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
-        });
+      function setActive(btn, active) {
+        btn.setAttribute('aria-selected', active ? 'true' : 'false');
+        btn.classList.toggle(ACTIVE_BG, active);
+        btn.classList.toggle(ACTIVE_UNDERLINE, active);
+        btn.classList.toggle(ACTIVE_TXT, active);
+        btn.classList.toggle(INACTIVE_TXT, !active);
+        btn.classList.toggle(HOVER_BG, !active);
+      }
 
-        // Show the matching panel, hide others
+      function activate(tab) {
+        buttons.forEach(b => setActive(b, b.dataset.tab === tab));
         Object.entries(panels).forEach(([name, el]) => {
           if (!el) return;
           if (name === tab) el.classList.remove('hidden');
