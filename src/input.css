@@ -23,7 +23,7 @@
     /* a whisper of inner padding tint on hover for premium feel */
   }
   .card:hover {
-    border-color: #D9CCB1;
+    border-color: border-pebbleTeal;
     @apply -translate-y-0.5 shadow-pebble-hover bg-white;
   }
 
