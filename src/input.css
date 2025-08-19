@@ -18,14 +18,14 @@
 @layer components {
   /* Card: thicker border, soft shadow, gentle lift */
   .card {
-    border: 5px solid #E1D7C2;
-    @apply bg-white/90 rounded-2xl shadow-pebble p-6 transition transform;
-    /* a whisper of inner padding tint on hover for premium feel */
-  }
-  .card:hover {
-    border-color: border-pebbleTeal;
-    @apply -translate-y-0.5 shadow-pebble-hover bg-white;
-  }
+  border: 5px solid #96B6B6;  /* Pebble Teal */
+  @apply bg-paper rounded-2xl shadow-pebble p-5 transition transform;
+}
+.card:hover {
+  border-color: #6CA6C1;      /* Gentle Blue (slightly brighter contrast on hover) */
+  @apply -translate-y-0.5 shadow-pebble-hover;
+  background-color: rgba(255, 252, 242, 0.92);
+}
 
   /* Bigger, friendlier icon nests (pads behind the icon) */
   .icon-nest {
