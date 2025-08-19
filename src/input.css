@@ -2,93 +2,80 @@
 @tailwind components;
 @tailwind utilities;
 
-/* --- Slightly more visible paper speckle (keeps the playful Pebble DNA) --- */
+/* ---------- Base (neutral canvas, no paper tint) ---------- */
 @layer base {
+  html, body { height: 100%; }
   body {
-    /* the page wrapper now adds a warm→cool gradient; this texture stays very light */
-    background-image:
-      radial-gradient(circle at 1px 1px, rgba(0,0,0,0.04) 1px, transparent 0),
-      radial-gradient(circle at 0.5px 0.5px, rgba(0,0,0,0.03) 1px, transparent 0);
-    background-size: 22px 22px, 16px 16px;
-    background-blend-mode: multiply;
+    background-color: theme('colors.canvas');   /* #FAFAFA */
+    color: theme('colors.ink');                 /* #111827 */
+    font-family: theme('fontFamily.sans');
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Global focus ring (friendly, brandy, but subtle) */
+  :focus-visible {
+    outline: 3px solid color-mix(in srgb, theme('colors.pebbleTeal.500') 35%, transparent);
+    outline-offset: 2px;
+    border-radius: 12px;
   }
 }
 
-/* -------- Pebble components -------- */
+/* ---------- Components ---------- */
 @layer components {
-  /* Card: thicker border, soft shadow, gentle lift */
+  /* Card — white surface, neutral border, teal on hover */
   .card {
-  border: 5px solid #96B6B6;  /* Pebble Teal */
-  @apply bg-paper rounded-2xl shadow-pebble p-5 transition transform;
-}
-.card:hover {
-  border-color: #6CA6C1;      /* Gentle Blue (slightly brighter contrast on hover) */
-  @apply -translate-y-0.5 shadow-pebble-hover;
-  background-color: rgba(255, 252, 242, 0.92);
-}
+    background-color: theme('colors.surface');
+    border: 3px solid theme('colors.border');
+    border-radius: 1rem;            /* ~rounded-2xl */
+    box-shadow: theme('boxShadow.pebble');
+    padding: 1.25rem;               /* p-5 */
+    transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;
+  }
+  .card:hover {
+    border-color: theme('colors.pebbleTeal.500');
+    transform: translateY(-1px);
+    box-shadow: theme('boxShadow.pebble-hover');
+  }
+  .card--active {
+    border-color: theme('colors.pebbleTeal.600');
+  }
 
-  /* Bigger, friendlier icon nests (pads behind the icon) */
+  /* Icon nests — brand-consistent but very light */
   .icon-nest {
     @apply rounded-full flex items-center justify-center;
+    height: 72px; width: 72px;
+    background-color: theme('colors.pebbleTeal.50');
   }
-  .icon-nest-teal   { height: 88px; width: 88px; background-color: rgba(150,182,182,0.20); }
-  .icon-nest-blue   { height: 88px; width: 88px; background-color: rgba(108,166,193,0.20); }
-  .icon-nest-yellow { height: 88px; width: 88px; background-color: rgba(233,196,106,0.24); }
 
-  /* Chips */
-  .chip       { @apply text-xs md:text-sm font-semibold rounded-full px-3 py-1; }
-  .chip-warn  { @apply bg-[#EFE6D3] text-charcoal; }
-  .chip-info  { @apply bg-gentleBlue/20 text-charcoal/80; }
-  .chip-ok    { @apply bg-green-200 text-green-900; }
+  /* Tabs — neutral by default, teal underline when active */
+  .tab-btn {
+    @apply -mb-px px-4 py-2 rounded-t-lg text-sm md:text-base font-semibold border-b-2 border-transparent text-inkMuted hover:text-ink;
+  }
+  .tab-btn[aria-selected="true"] {
+    color: theme('colors.ink');
+    border-color: theme('colors.pebbleTeal.600');
+  }
 
-  /* Progress */
-  .progress-track { @apply h-2.5 w-full rounded-full bg-charcoal/10; }
-  .progress-fill  { @apply h-2.5 rounded-full; }
-  .progress-fill-teal   { @apply bg-pebbleTeal; }
-  .progress-fill-blue   { @apply bg-gentleBlue; }
-  .progress-fill-yellow { @apply bg-softYellow; }
+  /* Chips (status pills) */
+  .chip { @apply text-xs md:text-sm font-semibold rounded-full px-3 py-1; }
+  .chip-muted { background-color: #F3F4F6; color: #374151; }               /* Not started */
+  .chip-info  { background-color: theme('colors.pebbleTeal.50'); color: theme('colors.pebbleTeal.600'); }
+  .chip-ok    { background-color: theme('colors.successBg'); color: #166534; }
+  .chip-warn  { background-color: theme('colors.warnBg'); color: #78350F; }
 
-  /* Subtle gloss to make progress feel tactile (premium hint) */
+  /* Progress bars */
+  .progress-track { height: 10px; width: 100%; border-radius: 9999px; background-color: theme('colors.track'); }
+  .progress-fill  { height: 10px; border-radius: 9999px; }
+  .progress-fill-teal    { background-color: theme('colors.pebbleTeal.500'); }
+  .progress-fill-info    { background-color: theme('colors.info'); }
+  .progress-fill-success { background-color: theme('colors.success'); }
   .progress-gloss {
     background-image: linear-gradient(to bottom, rgba(255,255,255,0.25), rgba(255,255,255,0));
     background-blend-mode: overlay;
   }
-  @layer components {
-  /* Tabs */
-  .pebble-tab {
-    @apply text-lg font-semibold pb-2 border-b-2 border-transparent text-charcoal/80 transition-colors;
-  }
-  .pebble-tab.active {
-    @apply text-charcoal border-pebbleTeal;
-  }
-
-  /* Card shell */
-  .card-outer {
-    @apply bg-white rounded-2xl border-4 border-pebbleTeal shadow-pebble transition;
-  }
-  .card-outer:hover {
-    @apply shadow-pebble-hover;
-  }
-  .card-inner {
-    @apply p-5;
-  }
-
-  /* Icon nest */
-  .icon-nest {
-    @apply rounded-full bg-[#EAF3F3] border border-pebbleTeal/40 p-3 flex items-center justify-center;
-  }
-
-  /* Chips */
-  .chip       { @apply text-xs md:text-sm font-semibold rounded-full px-3 py-1; }
-  .chip-warn  { @apply bg-[#EFEFEF] text-charcoal; }
-  .chip-info  { @apply bg-gentleBlue/20 text-charcoal/80; }
-
-  /* Progress */
-  .progress-track { @apply h-2.5 w-full rounded-full bg-black/10; }
-  .progress-fill  { @apply h-2.5 rounded-full; }
 }
 
-}
 
 
 
