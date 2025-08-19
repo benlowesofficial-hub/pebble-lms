@@ -53,6 +53,41 @@
     background-image: linear-gradient(to bottom, rgba(255,255,255,0.25), rgba(255,255,255,0));
     background-blend-mode: overlay;
   }
+  @layer components {
+  /* Tabs */
+  .pebble-tab {
+    @apply text-lg font-semibold pb-2 border-b-2 border-transparent text-charcoal/80 transition-colors;
+  }
+  .pebble-tab.active {
+    @apply text-charcoal border-pebbleTeal;
+  }
+
+  /* Card shell */
+  .card-outer {
+    @apply bg-white rounded-2xl border-4 border-pebbleTeal shadow-pebble transition;
+  }
+  .card-outer:hover {
+    @apply shadow-pebble-hover;
+  }
+  .card-inner {
+    @apply p-5;
+  }
+
+  /* Icon nest */
+  .icon-nest {
+    @apply rounded-full bg-[#EAF3F3] border border-pebbleTeal/40 p-3 flex items-center justify-center;
+  }
+
+  /* Chips */
+  .chip       { @apply text-xs md:text-sm font-semibold rounded-full px-3 py-1; }
+  .chip-warn  { @apply bg-[#EFEFEF] text-charcoal; }
+  .chip-info  { @apply bg-gentleBlue/20 text-charcoal/80; }
+
+  /* Progress */
+  .progress-track { @apply h-2.5 w-full rounded-full bg-black/10; }
+  .progress-fill  { @apply h-2.5 rounded-full; }
+}
+
 }
 
 
