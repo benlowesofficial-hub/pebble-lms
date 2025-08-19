@@ -11,168 +11,105 @@
   <!-- Tailwind build output -->
   <link href="/styles.css" rel="stylesheet" />
 </head>
-<body class="min-h-screen font-sans antialiased">
+<body class="min-h-screen text-charcoal font-sans antialiased">
 
-  <!-- Header -->
-  <header class="sticky top-0 z-10 bg-white/70 backdrop-blur border-b border-black/5">
-    <div class="mx-auto max-w-7xl px-4 py-4 flex items-center justify-between">
-      <a href="/index.html" class="flex items-center gap-3">
-        <img src="/assets/PebbleLogo.png" alt="Pebble" class="h-12 md:h-14" />
-        <span class="sr-only">Home</span>
-      </a>
-      <div class="text-sm opacity-0 select-none">.</div>
-    </div>
-  </header>
+  <!-- Page background: warm -> cool mist, with subtle texture from input.css still visible -->
+  <div class="min-h-screen bg-[radial-gradient(1200px_800px_at_10%_0%,#F9F6EE_0%,rgba(249,246,238,0)_55%),linear-gradient(180deg,#F9F6EE_0%,#F6FBFA_60%,#F5FAF9_100%)]">
 
-  <!-- Main -->
-  <main class="mx-auto max-w-6xl px-4 py-8 md:py-10 animate-fade-in">
-    <!-- Page title -->
-    <h1 class="page-title text-5xl md:text-6xl mb-5">Your training</h1>
-
-    <!-- Tabs -->
-    <nav class="mb-6" aria-label="Course filters">
-      <div class="tabs">
-        <button
-          class="tab-btn"
-          data-tab="required"
-          aria-controls="panel-required"
-          aria-selected="true"
-          role="tab"
-        >Required</button>
-
-        <button
-          class="tab-btn"
-          data-tab="optional"
-          aria-controls="panel-optional"
-          aria-selected="false"
-          role="tab"
-        >Optional</button>
-
-        <button
-          class="tab-btn"
-          data-tab="completed"
-          aria-controls="panel-completed"
-          aria-selected="false"
-          role="tab"
-        >Completed</button>
-      </div>
-    </nav>
-
-    <!-- Panels -->
-    <section id="panel-required" role="tabpanel" aria-labelledby="tab-required" class="pt-2">
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 md:gap-10">
-        <!-- Card: Fire Safety -->
-        <a href="/course-fire-safety.html" class="group block focus:outline-none focus-visible:ring-4 focus-visible:ring-pebbleTeal/30 rounded-2xl">
-          <article class="card">
-            <div class="flex items-start justify-between gap-6">
-              <h3 class="text-[22px] md:text-2xl font-extrabold leading-tight tracking-tight">Fire Safety</h3>
-              <div class="icon-nest icon-nest-yellow mt-1 mr-1">
-                <img src="/assets/icons/fire.png" alt="" class="h-16 w-16 object-contain" />
-              </div>
-            </div>
-
-            <div class="mt-5 space-y-3">
-              <div class="progress-track">
-                <div class="progress-fill progress-fill-teal" style="width:0%"></div>
-              </div>
-              <div class="flex items-center justify-between">
-                <span class="chip chip-warn">Not started</span>
-                <p class="muted">~10 min</p>
-              </div>
-            </div>
-          </article>
+    <!-- Header -->
+    <header class="sticky top-0 z-10 backdrop-blur-md border-b border-black/5 bg-[linear-gradient(180deg,rgba(249,246,238,0.85)_0%,rgba(245,250,249,0.85)_100%)]">
+      <div class="mx-auto max-w-6xl px-5 py-4 flex items-center justify-between">
+        <a href="/index.html" class="flex items-center gap-3">
+          <img src="/assets/PebbleLogo.png" alt="Pebble" class="h-12 md:h-14" />
+          <span class="sr-only">Home</span>
         </a>
-
-        <!-- Card: GDPR Basics -->
-        <a href="/course-gdpr-basics.html" class="group block focus:outline-none focus-visible:ring-4 focus-visible:ring-pebbleTeal/30 rounded-2xl">
-          <article class="card">
-            <div class="flex items-start justify-between gap-6">
-              <h3 class="text-[22px] md:text-2xl font-extrabold leading-tight tracking-tight">GDPR Basics</h3>
-              <div class="icon-nest icon-nest-teal mt-1 mr-1">
-                <img src="/assets/icons/lock.png" alt="" class="h-16 w-16 object-contain" />
-              </div>
-            </div>
-
-            <div class="mt-5 space-y-3">
-              <div class="progress-track">
-                <div class="progress-fill progress-fill-blue" style="width:45%"></div>
-              </div>
-              <div class="flex items-center justify-between">
-                <span class="chip chip-info">In progress</span>
-                <p class="muted">~12 min</p>
-              </div>
-            </div>
-          </article>
-        </a>
+        <div class="text-sm opacity-0 select-none">.</div>
       </div>
-    </section>
+    </header>
 
-    <section id="panel-optional" class="hidden pt-2" role="tabpanel" aria-labelledby="tab-optional">
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 md:gap-10">
-        <!-- Optional: Phishing -->
-        <a href="/course-phishing.html" class="group block focus:outline-none focus-visible:ring-4 focus-visible:ring-pebbleTeal/30 rounded-2xl">
-          <article class="card">
-            <div class="flex items-start justify-between gap-6">
-              <h3 class="text-[22px] md:text-2xl font-extrabold leading-tight tracking-tight">Phishing Awareness</h3>
-              <div class="icon-nest icon-nest-yellow mt-1 mr-1">
-                <img src="/assets/icons/speech.png" alt="" class="h-16 w-16 object-contain" />
-              </div>
-            </div>
-
-            <div class="mt-5 space-y-3">
-              <div class="progress-track">
-                <div class="progress-fill progress-fill-yellow" style="width:0%"></div>
-              </div>
-              <div class="flex items-center justify-between">
-                <span class="chip bg-charcoal/5">Not started</span>
-                <p class="muted">~8 min</p>
-              </div>
-            </div>
-          </article>
-        </a>
+    <main class="mx-auto max-w-6xl px-5 py-10 md:py-14 animate-fade-in">
+      <!-- Page title -->
+      <div class="mb-6">
+        <h1 class="text-5xl md:text-6xl font-extrabold tracking-[-0.02em]">Your training</h1>
+        <!-- tabs -->
+        <nav class="mt-6 flex gap-8 text-[17px] font-semibold">
+          <button class="pb-2 border-b-4 border-charcoal/70">Required</button>
+          <button class="pb-2 border-b-4 border-transparent hover:border-charcoal/30 transition-colors">Optional</button>
+          <button class="pb-2 border-b-4 border-transparent hover:border-charcoal/30 transition-colors">Completed</button>
+        </nav>
       </div>
-    </section>
 
-    <section id="panel-completed" class="hidden pt-2" role="tabpanel" aria-labelledby="tab-completed">
-      <div class="rounded-2xl border border-black/10 bg-white shadow-[0_1px_0_rgba(0,0,0,0.03),0_6px_16px_rgba(0,0,0,0.06)] p-8 text-center">
-        <p class="text-lg font-semibold mb-2">No completed courses yet</p>
-        <p class="muted">Your finished courses will appear here.</p>
-      </div>
-    </section>
-  </main>
+      <!-- Cards grid -->
+      <section class="mt-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
 
-  <footer class="mt-16 pb-10 text-center text-sm opacity-60">
-    © <span id="year"></span> PebbleLMS
-  </footer>
+          <!-- Card: Fire Safety -->
+          <a href="/course-fire-safety.html" class="group block focus:outline-none focus-visible:ring-4 focus-visible:ring-pebbleTeal/30 rounded-2xl">
+            <article class="card">
+              <div class="flex items-start justify-between gap-6">
+                <div>
+                  <h3 class="text-[22px] font-extrabold leading-tight">Fire Safety</h3>
+                </div>
+                <!-- Larger icon nest -->
+                <div class="icon-nest icon-nest-yellow mt-1 mr-1 shadow-sm">
+                  <img src="/assets/icons/fire.png" alt="" class="h-16 w-16 object-contain" />
+                </div>
+              </div>
 
-  <!-- Minimal tab script (unchanged logic; improves active styles) -->
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
+              <div class="mt-5 space-y-3">
+                <!-- progress -->
+                <div class="progress-track">
+                  <div class="progress-fill progress-fill-teal progress-gloss" style="width:0%"></div>
+                </div>
 
-    (function () {
-      const buttons = Array.from(document.querySelectorAll('.tab-btn'));
-      const panels = {
-        required: document.getElementById('panel-required'),
-        optional: document.getElementById('panel-optional'),
-        completed: document.getElementById('panel-completed')
-      };
+                <!-- status + duration -->
+                <div class="flex items-center justify-between">
+                  <span class="chip chip-warn">Not started</span>
+                  <p class="text-sm opacity-60">~10 min</p>
+                </div>
+              </div>
+            </article>
+          </a>
 
-      function activate(tab) {
-        buttons.forEach(btn => {
-          const active = btn.dataset.tab === tab;
-          btn.setAttribute('aria-selected', active ? 'true' : 'false');
-        });
-        Object.entries(panels).forEach(([name, el]) => {
-          if (!el) return;
-          if (name === tab) el.classList.remove('hidden');
-          else el.classList.add('hidden');
-        });
-      }
+          <!-- Card: GDPR Basics -->
+          <a href="/course-gdpr-basics.html" class="group block focus:outline-none focus-visible:ring-4 focus-visible:ring-pebbleTeal/30 rounded-2xl">
+            <article class="card">
+              <div class="flex items-start justify-between gap-6">
+                <div>
+                  <h3 class="text-[22px] font-extrabold leading-tight">GDPR Basics</h3>
+                </div>
+                <div class="icon-nest icon-nest-teal mt-1 mr-1 shadow-sm">
+                  <img src="/assets/icons/lock.png" alt="" class="h-16 w-16 object-contain" />
+                </div>
+              </div>
 
-      buttons.forEach(btn => btn.addEventListener('click', () => activate(btn.dataset.tab)));
-      activate('required');
-    })();
-  </script>
+              <div class="mt-5 space-y-3">
+                <div class="progress-track">
+                  <div class="progress-fill progress-fill-blue progress-gloss" style="width:45%"></div>
+                </div>
+
+                <div class="flex items-center justify-between">
+                  <span class="chip chip-info">In progress</span>
+                  <p class="text-sm opacity-60">~12 min</p>
+                </div>
+              </div>
+            </article>
+          </a>
+
+        </div>
+
+        <!-- Soft section delimiter for future lists (optional/complete) -->
+        <div class="mt-14">
+          <hr class="border-0 h-[1px] bg-gradient-to-r from-transparent via-charcoal/10 to-transparent">
+        </div>
+      </section>
+    </main>
+
+    <footer class="pb-10 text-center text-sm opacity-60">
+      © <span id="year"></span> PebbleLMS
+      <script>document.getElementById('year').textContent = new Date().getFullYear()</script>
+    </footer>
+  </div>
 </body>
 </html>
 
