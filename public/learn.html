@@ -24,34 +24,35 @@
     </div>
   </header>
 
-  <main class="mx-auto max-w-7xl px-4 py-10 md:py-14 animate-fade-in">
-    <!-- Page title -->
-    <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight mb-10">Your training</h1>
+  <!-- Narrower main column on desktop -->
+  <main class="mx-auto max-w-5xl px-4 py-8 md:py-10 animate-fade-in">
+    <!-- Page title: tighter tracking, less margin below -->
+    <h1 class="text-5xl md:text-6xl font-extrabold tracking-tighter leading-tight mb-6">
+      Your training
+    </h1>
 
     <!-- Required -->
-    <section class="mb-14">
+    <section class="mb-10 md:mb-12">
       <h2 class="text-3xl font-bold mb-6">Required</h2>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-10">
         <!-- Card: Fire Safety -->
         <a href="/course-fire-safety.html" class="group block focus:outline-none focus-visible:ring-4 focus-visible:ring-pebbleTeal/30 rounded-2xl">
           <article class="card">
             <div class="flex items-start justify-between gap-6">
               <h3 class="text-[22px] font-extrabold leading-tight">Fire Safety</h3>
 
-              <!-- Larger icon, nudged inward/down -->
+              <!-- Larger icon already implemented; keep inward/down nudge -->
               <div class="icon-nest icon-nest-yellow mt-2 mr-2">
                 <img src="/assets/icons/fire.png" alt="" class="h-14 w-14 object-contain" />
               </div>
             </div>
 
             <div class="mt-4 space-y-3">
-              <!-- progress -->
               <div class="progress-track">
                 <div class="progress-fill progress-fill-teal progress-gloss" style="width:0%"></div>
               </div>
 
-              <!-- status + duration -->
               <div class="flex items-center justify-between">
                 <span class="chip chip-warn">Not started</span>
                 <p class="text-sm opacity-60">~10 min</p>
@@ -83,16 +84,17 @@
             </div>
           </article>
         </a>
-
-        <div class="hidden lg:block"></div>
       </div>
     </section>
+
+    <!-- Subtle delimiter before Optional -->
+    <div class="my-8 md:my-10 h-px bg-black/5 rounded-full"></div>
 
     <!-- Optional -->
     <section>
       <h2 class="text-3xl font-bold mb-6">Optional</h2>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-10">
         <a href="/course-phishing.html" class="group block focus:outline-none focus-visible:ring-4 focus-visible:ring-pebbleTeal/30 rounded-2xl">
           <article class="card">
             <div class="flex items-start justify-between gap-6">
