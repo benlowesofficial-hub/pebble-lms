@@ -11,18 +11,18 @@
   <!-- Tailwind build output -->
   <link href="/styles.css" rel="stylesheet" />
 </head>
-<body class="min-h-screen text-charcoal font-sans antialiased">
+<body class="min-h-screen font-sans antialiased">
 
-  <!-- Header -->
- <header class="site-header">
-  <div class="mx-auto max-w-7xl px-4 py-5 flex items-center justify-between">
-    <a href="/index.html" class="flex items-center gap-3 text-white/95 hover:text-white">
-      <img src="/assets/PebbleLogo.png" alt="Pebble" class="h-12 md:h-14 drop-shadow-sm" />
-      <span class="sr-only">Home</span>
-    </a>
-    <div class="text-sm opacity-0 select-none">.</div>
-  </div>
-</header>
+  <!-- Header (block colour) -->
+  <header class="site-header">
+    <div class="mx-auto max-w-7xl px-4 py-5 flex items-center justify-between">
+      <a href="/index.html" class="flex items-center gap-3 text-white/95 hover:text-white">
+        <img src="/assets/PebbleLogo.png" alt="Pebble" class="h-12 md:h-14 drop-shadow-sm" />
+        <span class="sr-only">Home</span>
+      </a>
+      <div class="text-sm opacity-0 select-none">.</div>
+    </div>
+  </header>
 
   <!-- Main column -->
   <main class="mx-auto max-w-5xl px-4 py-8 md:py-10 animate-fade-in">
@@ -33,10 +33,11 @@
 
     <!-- Tabs -->
     <nav class="mb-6" aria-label="Course filters">
-      <div class="flex gap-3 border-b border-black/10">
-        <!-- Active tab classes are toggled by JS -->
+      <div class="tab-rail">
+        <!-- Active tab is controlled by aria-selected -->
         <button
-          class="tab-btn -mb-px px-4 py-2 rounded-t-lg text-sm md:text-base font-semibold border-b-2 border-transparent text-charcoal/70 hover:text-charcoal hover:border-black/10 aria-selected:border-charcoal aria-selected:text-charcoal"
+          id="tab-required"
+          class="tab-btn"
           data-tab="required"
           aria-controls="panel-required"
           aria-selected="true"
@@ -46,7 +47,8 @@
         </button>
 
         <button
-          class="tab-btn -mb-px px-4 py-2 rounded-t-lg text-sm md:text-base font-semibold border-b-2 border-transparent text-charcoal/70 hover:text-charcoal hover:border-black/10"
+          id="tab-optional"
+          class="tab-btn"
           data-tab="optional"
           aria-controls="panel-optional"
           aria-selected="false"
@@ -56,7 +58,8 @@
         </button>
 
         <button
-          class="tab-btn -mb-px px-4 py-2 rounded-t-lg text-sm md:text-base font-semibold border-b-2 border-transparent text-charcoal/70 hover:text-charcoal hover:border-black/10"
+          id="tab-completed"
+          class="tab-btn"
           data-tab="completed"
           aria-controls="panel-completed"
           aria-selected="false"
@@ -71,11 +74,11 @@
     <section id="panel-required" role="tabpanel" aria-labelledby="tab-required">
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-10">
         <!-- Card: Fire Safety -->
-        <a href="/course-fire-safety.html" class="group block focus:outline-none focus-visible:ring-4 focus-visible:ring-pebbleTeal/30 rounded-2xl">
+        <a href="/course-fire-safety.html" class="group block focus:outline-none focus-visible:ring-4 focus-visible:ring-[#7FA2A2]/30 rounded-2xl">
           <article class="card">
             <div class="flex items-start justify-between gap-6">
               <h3 class="text-[22px] font-extrabold leading-tight">Fire Safety</h3>
-              <div class="icon-nest icon-nest-yellow mt-2 mr-2">
+              <div class="icon-nest mt-2 mr-2">
                 <img src="/assets/icons/fire.png" alt="" class="h-14 w-14 object-contain" />
               </div>
             </div>
@@ -85,7 +88,7 @@
                 <div class="progress-fill progress-fill-teal progress-gloss" style="width:0%"></div>
               </div>
               <div class="flex items-center justify-between">
-                <span class="chip chip-warn">Not started</span>
+                <span class="chip chip-muted">Not started</span>
                 <p class="text-sm opacity-60">~10 min</p>
               </div>
             </div>
@@ -93,18 +96,18 @@
         </a>
 
         <!-- Card: GDPR Basics -->
-        <a href="/course-gdpr-basics.html" class="group block focus:outline-none focus-visible:ring-4 focus-visible:ring-pebbleTeal/30 rounded-2xl">
+        <a href="/course-gdpr-basics.html" class="group block focus:outline-none focus-visible:ring-4 focus-visible:ring-[#7FA2A2]/30 rounded-2xl">
           <article class="card">
             <div class="flex items-start justify-between gap-6">
               <h3 class="text-[22px] font-extrabold leading-tight">GDPR Basics</h3>
-              <div class="icon-nest icon-nest-teal mt-2 mr-2">
+              <div class="icon-nest mt-2 mr-2">
                 <img src="/assets/icons/lock.png" alt="" class="h-14 w-14 object-contain" />
               </div>
             </div>
 
             <div class="mt-4 space-y-3">
               <div class="progress-track">
-                <div class="progress-fill progress-fill-blue progress-gloss" style="width:45%"></div>
+                <div class="progress-fill progress-fill-teal progress-gloss" style="width:45%"></div>
               </div>
               <div class="flex items-center justify-between">
                 <span class="chip chip-info">In progress</span>
@@ -118,22 +121,22 @@
 
     <section id="panel-optional" class="hidden" role="tabpanel" aria-labelledby="tab-optional">
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-10">
-        <!-- Keep the same single optional card -->
-        <a href="/course-phishing.html" class="group block focus:outline-none focus-visible:ring-4 focus-visible:ring-pebbleTeal/30 rounded-2xl">
+        <!-- Card: Phishing Awareness -->
+        <a href="/course-phishing.html" class="group block focus:outline-none focus-visible:ring-4 focus-visible:ring-[#7FA2A2]/30 rounded-2xl">
           <article class="card">
             <div class="flex items-start justify-between gap-6">
               <h3 class="text-[22px] font-extrabold leading-tight">Phishing Awareness</h3>
-              <div class="icon-nest icon-nest-yellow mt-2 mr-2">
+              <div class="icon-nest mt-2 mr-2">
                 <img src="/assets/icons/speech.png" alt="" class="h-14 w-14 object-contain" />
               </div>
             </div>
 
             <div class="mt-4 space-y-3">
               <div class="progress-track">
-                <div class="progress-fill progress-fill-yellow progress-gloss" style="width:0%"></div>
+                <div class="progress-fill progress-fill-teal progress-gloss" style="width:0%"></div>
               </div>
               <div class="flex items-center justify-between">
-                <span class="chip bg-charcoal/5">Not started</span>
+                <span class="chip chip-muted">Not started</span>
                 <p class="text-sm opacity-60">~8 min</p>
               </div>
             </div>
@@ -143,8 +146,8 @@
     </section>
 
     <section id="panel-completed" class="hidden" role="tabpanel" aria-labelledby="tab-completed">
-      <!-- Friendly empty state for now (no new assets added) -->
-      <div class="rounded-2xl border-4 border-[#E1D7C2] bg-paper shadow-sm p-8 text-center">
+      <!-- Friendly empty state -->
+      <div class="card text-center">
         <p class="text-lg font-semibold mb-2">No completed courses yet</p>
         <p class="text-sm opacity-70">Your finished courses will appear here.</p>
       </div>
@@ -167,32 +170,27 @@
       };
 
       function activate(tab) {
-        // toggle buttons
+        // Toggle aria-selected on buttons (CSS handles styling)
         buttons.forEach(btn => {
           const isActive = btn.dataset.tab === tab;
           btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
-          btn.classList.toggle('border-charcoal', isActive);
-          btn.classList.toggle('text-charcoal', isActive);
-          btn.classList.toggle('text-charcoal/70', !isActive);
         });
-        // toggle panels
+
+        // Show the matching panel, hide others
         Object.entries(panels).forEach(([name, el]) => {
           if (!el) return;
-          if (name === tab) { el.classList.remove('hidden'); }
-          else { el.classList.add('hidden'); }
+          if (name === tab) el.classList.remove('hidden');
+          else el.classList.add('hidden');
         });
       }
 
-      buttons.forEach(btn => {
-        btn.addEventListener('click', () => activate(btn.dataset.tab));
-      });
-
-      // ensure default state
-      activate('required');
+      buttons.forEach(btn => btn.addEventListener('click', () => activate(btn.dataset.tab)));
+      activate('required'); // default state
     })();
   </script>
 </body>
 </html>
+
 
 
 
