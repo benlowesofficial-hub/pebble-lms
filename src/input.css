@@ -33,7 +33,7 @@
   .site-header {
     /* Pebble Teal gradient: 600 -> 500 */
     background: linear-gradient(180deg, #6E8E8E 0%, #7FA2A2 100%);
-    color: #FFFFFF;
+    color: #F1F5F5;
     border-bottom: 1px solid rgba(255,255,255,0.1);
     box-shadow: 0 6px 24px rgba(0,0,0,0.06);
   }
