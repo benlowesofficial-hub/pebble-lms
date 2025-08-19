@@ -2,79 +2,119 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ---------- Base (neutral canvas, no paper tint) ---------- */
+/* =========================
+   Base (neutral canvas)
+   ========================= */
 @layer base {
   html, body { height: 100%; }
+
   body {
-    background-color: theme('colors.canvas');   /* #FAFAFA */
-    color: theme('colors.ink');                 /* #111827 */
-    font-family: theme('fontFamily.sans');
+    /* cool near-white background + dark readable text */
+    background-color: #FAFAFA;
+    color: #111827; /* "ink" */
+    font-family: Nunito, system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Global focus ring (friendly, brandy, but subtle) */
+  /* Friendly brand-tinted focus ring */
   :focus-visible {
-    outline: 3px solid color-mix(in srgb, theme('colors.pebbleTeal.500') 35%, transparent);
+    outline: 3px solid rgba(150, 182, 182, 0.35); /* Pebble teal @ 35% */
     outline-offset: 2px;
     border-radius: 12px;
   }
 }
 
-/* ---------- Components ---------- */
+/* =========================
+   Components
+   ========================= */
 @layer components {
-  /* Card — white surface, neutral border, teal on hover */
+  /* ---------- Site Header (block colour) ---------- */
+  .site-header {
+    /* Pebble Teal gradient: 600 -> 500 */
+    background: linear-gradient(180deg, #6E8E8E 0%, #7FA2A2 100%);
+    color: #FFFFFF;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 6px 24px rgba(0,0,0,0.06);
+  }
+
+  /* ---------- Cards ---------- */
   .card {
-    background-color: theme('colors.surface');
-    border: 3px solid theme('colors.border');
-    border-radius: 1rem;            /* ~rounded-2xl */
-    box-shadow: theme('boxShadow.pebble');
-    padding: 1.25rem;               /* p-5 */
+    background-color: #FFFFFF;               /* white surface */
+    border: 3px solid #E5E7EB;               /* neutral border */
+    border-radius: 1rem;                     /* ~rounded-2xl */
+    box-shadow: 0 2px 0 rgba(0,0,0,0.04),
+                0 8px 24px rgba(0,0,0,0.04); /* soft premium */
+    padding: 1.25rem;                        /* p-5 */
     transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;
   }
   .card:hover {
-    border-color: theme('colors.pebbleTeal.500');
+    border-color: #7FA2A2;                   /* Pebble Teal 500 on hover */
     transform: translateY(-1px);
-    box-shadow: theme('boxShadow.pebble-hover');
+    box-shadow: 0 3px 0 rgba(0,0,0,0.05),
+                0 12px 32px rgba(0,0,0,0.08);
   }
-  .card--active {
-    border-color: theme('colors.pebbleTeal.600');
-  }
+  .card--active { border-color: #6E8E8E; }   /* Pebble Teal 600 for selected states */
 
-  /* Icon nests — brand-consistent but very light */
+  /* ---------- Icon nests (brand-consistent, very light) ---------- */
   .icon-nest {
     @apply rounded-full flex items-center justify-center;
     height: 72px; width: 72px;
-    background-color: theme('colors.pebbleTeal.50');
+    background-color: #F1F5F5; /* Pebble Teal 50 */
   }
 
-  /* Tabs — neutral by default, teal underline when active */
+  /* ---------- Tabs ---------- */
+  /* rail keeps the thin divider & spacing */
+  .tab-rail {
+    @apply flex items-end gap-2;
+    border-bottom: 1px solid #E5E7EB; /* neutral divider */
+  }
+
+  /* base tab */
   .tab-btn {
-    @apply -mb-px px-4 py-2 rounded-t-lg text-sm md:text-base font-semibold border-b-2 border-transparent text-inkMuted hover:text-ink;
+    @apply -mb-px px-3 md:px-4 py-2 rounded-t-lg text-sm md:text-base font-semibold border-b-2 border-transparent;
+    color: #475569;           /* muted ink */
+    transition: background-color .15s ease, border-color .15s ease, color .15s ease;
   }
+
+  /* hover for inactive */
+  .tab-btn[aria-selected="false"]:hover {
+    background-color: #F1F5F5; /* very light teal wash */
+    color: #111827;
+  }
+
+  /* active tab (subtle pill + teal underline) */
   .tab-btn[aria-selected="true"] {
-    color: theme('colors.ink');
-    border-color: theme('colors.pebbleTeal.600');
+    color: #111827;
+    border-color: #6E8E8E;    /* Pebble Teal 600 underline */
+    background-color: #F1F5F5;/* subtle background pill */
   }
 
-  /* Chips (status pills) */
+  /* ---------- Chips (status pills) ---------- */
   .chip { @apply text-xs md:text-sm font-semibold rounded-full px-3 py-1; }
-  .chip-muted { background-color: #F3F4F6; color: #374151; }               /* Not started */
-  .chip-info  { background-color: theme('colors.pebbleTeal.50'); color: theme('colors.pebbleTeal.600'); }
-  .chip-ok    { background-color: theme('colors.successBg'); color: #166534; }
-  .chip-warn  { background-color: theme('colors.warnBg'); color: #78350F; }
+  .chip-muted  { background-color: #F3F4F6; color: #374151; }  /* Not started */
+  .chip-info   { background-color: #E7F0F0; color: #3F6666; }  /* In progress (teal tint) */
+  .chip-ok     { background-color: #E9FBEF; color: #166534; }  /* Completed */
+  .chip-warn   { background-color: #FFF7E6; color: #78350F; }  /* Warning */
 
-  /* Progress bars */
-  .progress-track { height: 10px; width: 100%; border-radius: 9999px; background-color: theme('colors.track'); }
-  .progress-fill  { height: 10px; border-radius: 9999px; }
-  .progress-fill-teal    { background-color: theme('colors.pebbleTeal.500'); }
-  .progress-fill-info    { background-color: theme('colors.info'); }
-  .progress-fill-success { background-color: theme('colors.success'); }
+  /* ---------- Progress bars ---------- */
+  .progress-track {
+    height: 10px; width: 100%;
+    border-radius: 9999px;
+    background-color: #EEF2F6;              /* neutral track */
+  }
+  .progress-fill {
+    height: 10px; border-radius: 9999px;
+  }
+  .progress-fill-teal    { background-color: #7FA2A2; } /* Pebble Teal 500 */
+  .progress-fill-info    { background-color: #3B82F6; }
+  .progress-fill-success { background-color: #16A34A; }
   .progress-gloss {
     background-image: linear-gradient(to bottom, rgba(255,255,255,0.25), rgba(255,255,255,0));
     background-blend-mode: overlay;
   }
 }
+
 
 
 
