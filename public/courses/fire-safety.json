@@ -31,8 +31,12 @@
                 "type": "group",
                 "layout": "full",
                 "items": [
-                  { "block": { "type": "header", "text": "Welcome to Fire Safety" } },
-                  { "block": { "type": "text", "text": "This short module will help you understand the basics of fire safety — the common hazards to look for and the simple steps to keep people safe." } }
+                  {
+                    "block": {
+                      "type": "text",
+                      "text": "This short module will help you understand the basics of fire safety — the common hazards to look for and the simple steps to keep people safe."
+                    }
+                  }
                 ]
               }
             }
@@ -45,11 +49,14 @@
       "label": "Learning Outcomes",
       "title": "Learning Outcomes",
       "blocks": [
-        { "type": "list", "items": [
-          "Identify common fire hazards",
-          "Know how to respond safely",
-          "Understand evacuation routes"
-        ]}
+        {
+          "type": "list",
+          "items": [
+            "Identify common fire hazards",
+            "Know how to respond safely",
+            "Understand evacuation routes"
+          ]
+        }
       ]
     }
   ]
