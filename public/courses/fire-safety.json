@@ -1,0 +1,63 @@
+{
+  "id": "fire-safety",
+  "title": "Welcome to Fire Safety",
+  "screens": [
+    {
+      "id": "intro",
+      "label": "Welcome",
+      "title": "Welcome to Fire Safety",
+      "blocks": [
+        {
+          "type": "group",
+          "layout": "split",
+          "ratio": "40-60",
+          "stack": "ltr",
+          "align": "center",
+          "gap": "lg",
+          "items": [
+            {
+              "slot": "left",
+              "block": {
+                "type": "image",
+                "src": "/assets/icons/fire.png",
+                "alt": "Fire icon",
+                "style": "nest",
+                "size": "xl"
+              }
+            },
+            {
+              "slot": "right",
+              "block": {
+                "type": "group",
+                "layout": "full",
+                "items": [
+                  {
+                    "block": {
+                      "type": "text",
+                      "text": "This short module will help you understand the basics of fire safety — the common hazards to look for and the simple steps to keep people safe."
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "outcomes",
+      "label": "Learning Outcomes",
+      "title": "Learning Outcomes",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "Identify common fire hazards",
+            "Know how to respond safely",
+            "Understand evacuation routes"
+          ]
+        }
+      ]
+    }
+  ]
+}
