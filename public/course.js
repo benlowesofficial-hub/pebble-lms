@@ -72,20 +72,24 @@
       </div>`;
   }
 
-  // Icon / image with size + style options
+  // Icon / image with size + style options (fixed outer, scaled inner to avoid overlap)
   function renderImage(b) {
     const size = (b.size || "m"); // s | m | l | xl
     const style = (b.style || "plain"); // plain | nest
-    const map = { s: "h-12 w-12", m: "h-16 w-16", l: "h-24 w-24", xl: "h-28 w-28 md:h-32 md:w-32" };
-    const imgCls = map[size] || map.m;
+
+    // Outer circle sizes
+    const outer = { s: "h-16 w-16", m: "h-20 w-20", l: "h-28 w-28", xl: "h-36 w-36 md:h-40 md:w-40" };
+    const outerCls = outer[size] || outer.m;
 
     if (style === "nest") {
-      // Use utilities (not .icon-nest) so we can scale freely
       return `
-        <div class="rounded-full bg-pebbleTeal-50 flex items-center justify-center ${imgCls} mx-auto lg:mx-0">
-          <img src="${b.src}" alt="${escapeAttr(b.alt || "")}" class="${imgCls} object-contain p-2" />
+        <div class="rounded-full bg-pebbleTeal-50 flex items-center justify-center ${outerCls} mx-auto lg:mx-0">
+          <img src="${b.src}" alt="${escapeAttr(b.alt || "")}" class="h-3/4 w-3/4 object-contain" />
         </div>`;
     }
+    // Plain image sizes (no circle)
+    const img = { s: "h-12 w-12", m: "h-16 w-16", l: "h-24 w-24", xl: "h-28 w-28 md:h-32 md:w-32" };
+    const imgCls = img[size] || img.m;
     return `<img src="${b.src}" alt="${escapeAttr(b.alt || "")}" class="${imgCls} object-contain mx-auto lg:mx-0" />`;
   }
 
@@ -97,7 +101,6 @@
     const wrap = document.createElement("div");
     wrap.className = "space-y-6 animate-fade-in";
 
-    // If author supplied a screen header inside blocks, we don't duplicate.
     const maybeTitle = screen.title
       ? `<h1 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-2">${escapeHtml(screen.title)}</h1>`
       : "";
