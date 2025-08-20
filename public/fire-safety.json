@@ -1,0 +1,25 @@
+{
+  "id": "fire-safety",
+  "title": "Fire Safety",
+  "screens": [
+    {
+      "id": "intro",
+      "title": "Welcome to Fire Safety",
+      "blocks": [
+        { "type": "text", "text": "This short module will help you understand the basics of fire safety." },
+        { "type": "image", "src": "/assets/icons/fire.png" }
+      ]
+    },
+    {
+      "id": "outcomes",
+      "title": "Learning Outcomes",
+      "blocks": [
+        { "type": "list", "items": [
+          "Identify common fire hazards",
+          "Know how to respond safely",
+          "Understand evacuation routes"
+        ]}
+      ]
+    }
+  ]
+}
