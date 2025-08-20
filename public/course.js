@@ -7,6 +7,10 @@
   const root = document.getElementById("course-root");
   let current = 0;
 
+  // Ensure content doesn't hide behind the fixed nav
+  const NAV_RESERVED_SPACE = 96; // px
+  root.style.paddingBottom = NAV_RESERVED_SPACE + "px";
+
   // --- Render helpers --------------------------------------------------------
   function renderBlock(block) {
     switch (block.type) {
@@ -17,7 +21,6 @@
         return `<p class="text-lg text-inkMuted">${escapeHtml(block.text)}</p>`;
 
       case "image":
-        // Free‑floating icon, same look as learner cards
         return `
           <div class="icon-nest mt-2 mx-auto">
             <img src="${block.src}" alt="${escapeAttr(block.alt || "")}" class="h-14 w-14 object-contain" />
@@ -29,7 +32,7 @@
         </ul>`;
 
       default:
-        return `<div class="p-4 border rounded text-sm opacity-70">[${block.type}] not implemented</div>`;
+        return `<div class="p-4 border border-border rounded text-sm opacity-70">[${block.type}] not implemented</div>`;
     }
   }
 
@@ -43,43 +46,96 @@
 
     wrap.innerHTML = `
       <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-2">${escapeHtml(screen.title)}</h1>
-
       <div class="space-y-4">
         ${screen.blocks.map(renderBlock).join("")}
       </div>
+    `;
 
-      <div class="mt-10 flex items-center justify-between">
-        <button ${index === 0 ? "disabled" : ""}
-          class="px-4 py-2 rounded-lg bg-surface text-ink/70 border border-border
-                 disabled:opacity-50 hover:bg-canvas
-                 focus:outline-none focus-visible:ring-4 focus-visible:ring-pebbleTeal-200">
-          Back
-        </button>
+    root.innerHTML = "";
+    root.appendChild(wrap);
 
-        <button ${index === course.screens.length - 1 ? "disabled" : ""}
-          class="px-5 py-2.5 rounded-lg bg-pebbleTeal-600 text-surface font-semibold
-                 hover:bg-pebbleTeal-500 disabled:opacity-40
-                 focus:outline-none focus-visible:ring-4 focus-visible:ring-pebbleTeal-200">
-          Next
-        </button>
+    // Re-render nav for this screen
+    renderNav();
+  }
+
+  function renderNav() {
+    const total = course.screens.length;
+    const prev = current > 0 ? course.screens[current - 1] : null;
+    const next = current < total - 1 ? course.screens[current + 1] : null;
+
+    const prevLabel = prev ? (prev.label || prev.title) : "";
+    const nextLabel = next ? (next.label || next.title) : "";
+
+    const pct = Math.round(((current + 1) / total) * 100);
+
+    // Create/replace fixed nav container
+    let nav = document.getElementById("course-nav");
+    if (!nav) {
+      nav = document.createElement("div");
+      nav.id = "course-nav";
+      document.body.appendChild(nav);
+    }
+
+    nav.className = `
+      fixed inset-x-0 bottom-4 z-20
+      px-4
+    `;
+
+    nav.innerHTML = `
+      <div class="mx-auto max-w-5xl rounded-xl border border-border bg-surface shadow-pebble
+                  backdrop-blur p-3 md:p-4 animate-fade-in">
+        <div class="flex items-center justify-between gap-3">
+          <!-- Back -->
+          <button ${!prev ? "disabled" : ""}
+            class="px-3 md:px-4 py-2 rounded-lg border border-border bg-surface text-ink/80
+                   disabled:opacity-40 hover:bg-canvas transition
+                   focus:outline-none focus-visible:ring-4 focus-visible:ring-pebbleTeal-200"
+            aria-label="${prev ? `Go to previous: ${escapeAttr(prevLabel)}` : "No previous screen"}">
+            ← ${prev ? escapeHtml(prevLabel) : "Back"}
+          </button>
+
+          <!-- Center: step count -->
+          <div class="text-sm md:text-base font-semibold text-ink/80 select-none">
+            ${current + 1} / ${total}
+          </div>
+
+          <!-- Next -->
+          <button ${!next ? "disabled" : ""}
+            class="px-4 md:px-5 py-2.5 rounded-lg bg-pebbleTeal-600 text-surface font-semibold
+                   hover:bg-pebbleTeal-500 disabled:opacity-40
+                   focus:outline-none focus-visible:ring-4 focus-visible:ring-pebbleTeal-200"
+            aria-label="${next ? `Go to next: ${escapeAttr(nextLabel)}` : "No next screen"}">
+            ${next ? escapeHtml(nextLabel) + " →" : "Next"}
+          </button>
+        </div>
+
+        <!-- Progress bar -->
+        <div class="mt-3 h-2.5 w-full rounded-full bg-track overflow-hidden">
+          <div class="h-2.5 rounded-full bg-pebbleTeal-500"
+               style="width:${pct}%"></div>
+        </div>
       </div>
     `;
 
-    // Wire up nav
-    const [backBtn, nextBtn] = wrap.querySelectorAll("button");
-    backBtn && backBtn.addEventListener("click", () => nav(index - 1));
-    nextBtn && nextBtn.addEventListener("click", () => nav(index + 1));
+    // Wire up buttons
+    const [backBtn] = nav.querySelectorAll("button");
+    const nextBtn = nav.querySelectorAll("button")[1];
 
-    // Swap content
-    root.innerHTML = "";
-    root.appendChild(wrap);
+    backBtn && backBtn.addEventListener("click", () => navTo(current - 1));
+    nextBtn && nextBtn.addEventListener("click", () => navTo(current + 1));
   }
 
-  function nav(i) {
+  function navTo(i) {
     if (i < 0 || i >= course.screens.length) return;
     current = i;
     renderScreen(current);
   }
+
+  // Keyboard shortcuts: Left/Right arrows
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft") navTo(current - 1);
+    if (e.key === "ArrowRight") navTo(current + 1);
+  });
 
   // --- Escape helpers --------------------------------------------------------
   function escapeHtml(s = "") {
