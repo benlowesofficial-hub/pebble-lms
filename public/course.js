@@ -8,7 +8,7 @@
   let current = 0;
 
   // Reserve space so content never hides behind the fixed nav
-  const NAV_RESERVED_SPACE = 112; // px (a touch taller to fit the new stepper)
+  const NAV_RESERVED_SPACE = 112; // px
   root.style.paddingBottom = NAV_RESERVED_SPACE + "px";
 
   // --- Render helpers --------------------------------------------------------
@@ -77,12 +77,11 @@
 
     nav.className = `fixed inset-x-0 bottom-4 z-20 px-4`;
 
-    // --- Mini stepper dots (center, consistent width) ---
+    // Stepper dots
     const dots = Array.from({ length: total }, (_, i) => {
       const active = i === current;
       const completed = i < current;
-      const base =
-        "h-2.5 w-2.5 rounded-full transition duration-200";
+      const base = "h-2.5 w-2.5 rounded-full transition duration-200";
       const cls = active
         ? `${base} bg-pebbleTeal-600`
         : completed
@@ -95,14 +94,17 @@
       <div class="mx-auto max-w-4xl rounded-xl border border-border bg-surface shadow-pebble backdrop-blur p-3 md:p-4 animate-fade-in">
         <div class="grid grid-cols-3 items-center gap-3">
           <!-- Back (hidden on first) -->
-          <div class="justify-self-start">
+          <div class="justify-self-start min-w-0">
             ${isFirst ? "" : `
               <button
-                class="px-3 md:px-4 py-2 rounded-lg border border-border bg-surface text-ink/80
+                class="px-3 md:px-4 py-2 rounded-lg border border-border bg-surface text-ink/80 whitespace-nowrap min-w-0 max-w-full
                        hover:bg-canvas transition
                        focus:outline-none focus-visible:ring-4 focus-visible:ring-pebbleTeal-200"
                 aria-label="Go to previous: ${escapeAttr(prevLabel)}">
-                ← ${escapeHtml(prevLabel)}
+                <!-- Mobile: short label -->
+                <span class="md:hidden">← Back</span>
+                <!-- Desktop: contextual title, truncated if long -->
+                <span class="hidden md:inline block truncate">← ${escapeHtml(prevLabel)}</span>
               </button>
             `}
           </div>
@@ -113,10 +115,10 @@
           </div>
 
           <!-- Next / Finish -->
-          <div class="justify-self-end">
+          <div class="justify-self-end min-w-0">
             ${isLast ? `
               <button
-                class="px-4 md:px-5 py-2.5 rounded-lg bg-pebbleTeal-600 text-surface font-semibold
+                class="px-4 md:px-5 py-2.5 rounded-lg bg-pebbleTeal-600 text-surface font-semibold whitespace-nowrap
                        hover:bg-pebbleTeal-500
                        focus:outline-none focus-visible:ring-4 focus-visible:ring-pebbleTeal-200"
                 aria-label="Finish course">
@@ -124,11 +126,14 @@
               </button>
             ` : `
               <button
-                class="px-4 md:px-5 py-2.5 rounded-lg bg-pebbleTeal-600 text-surface font-semibold
+                class="px-4 md:px-5 py-2.5 rounded-lg bg-pebbleTeal-600 text-surface font-semibold whitespace-nowrap min-w-0 max-w-full
                        hover:bg-pebbleTeal-500
                        focus:outline-none focus-visible:ring-4 focus-visible:ring-pebbleTeal-200"
                 aria-label="Go to next: ${escapeAttr(nextLabel)}">
-                ${escapeHtml(nextLabel)} →
+                <!-- Mobile: short label -->
+                <span class="md:hidden">Next →</span>
+                <!-- Desktop: contextual title, truncated if long -->
+                <span class="hidden md:inline block truncate">${escapeHtml(nextLabel)} →</span>
               </button>
             `}
           </div>
@@ -177,5 +182,3 @@
   // Initial render
   renderScreen(current);
 })();
-
-
