@@ -6,29 +6,90 @@
   const root = document.getElementById("course-root");
   let current = 0;
 
-  const NAV_RESERVED_SPACE = 96;
+  // Reserve space so content never hides behind the fixed nav
+  const NAV_RESERVED_SPACE = 112; // px
   root.style.paddingBottom = NAV_RESERVED_SPACE + "px";
 
+  // ---------------- Block renderers ----------------
   function renderBlock(block) {
     switch (block.type) {
+      case "group":
+        return renderGroup(block);
+
       case "header":
         return `<h2 class="text-[22px] font-extrabold leading-tight">${escapeHtml(block.text)}</h2>`;
+
       case "text":
         return `<p class="text-lg text-inkMuted">${escapeHtml(block.text)}</p>`;
+
       case "image":
-        return `
-          <div class="icon-nest mt-2 mx-auto">
-            <img src="${block.src}" alt="${escapeAttr(block.alt || "")}" class="h-14 w-14 object-contain" />
-          </div>`;
+        return renderImage(block);
+
       case "list":
         return `<ul class="list-disc pl-6 space-y-1 text-lg">
           ${block.items.map(i => `<li>${escapeHtml(i)}</li>`).join("")}
         </ul>`;
+
       default:
         return `<div class="p-4 border border-border rounded text-sm opacity-70">[${block.type}] not implemented</div>`;
     }
   }
 
+  // Split / full layout container
+  function renderGroup(g) {
+    const layout = g.layout || "full"; // "full" | "split"
+    const ratio = g.ratio || "50-50";  // "50-50" | "40-60" | "60-40"
+    const stack = g.stack || "ltr";    // "ltr" | "rtl"
+    const gap = g.gap || "lg";         // "sm" | "md" | "lg"
+    const align = g.align || "center"; // "start" | "center"
+
+    const gapCls = gap === "sm" ? "gap-4" : gap === "md" ? "gap-6" : "gap-10";
+    const alignCls = align === "start" ? "lg:items-start" : "lg:items-center";
+    const base = `grid grid-cols-1 ${gapCls} lg:grid-cols-12 ${alignCls}`;
+
+    if (layout === "full") {
+      return `
+        <div class="${base}">
+          ${(g.items || []).map(it => `
+            <div class="lg:col-span-12">
+              ${renderBlock(it.block)}
+            </div>
+          `).join("")}
+        </div>`;
+    }
+
+    // split
+    const spans = ratio === "40-60" ? [5,7] : ratio === "60-40" ? [7,5] : [6,6];
+    const leftOrder  = stack === "rtl" ? "order-2 lg:order-none" : "order-1 lg:order-none";
+    const rightOrder = stack === "rtl" ? "order-1 lg:order-none" : "order-2 lg:order-none";
+    const left  = (g.items || []).find(i => i.slot === "left");
+    const right = (g.items || []).find(i => i.slot === "right");
+
+    return `
+      <div class="${base}">
+        <div class="${leftOrder} lg:col-span-${spans[0]}">${left ? renderBlock(left.block) : ""}</div>
+        <div class="${rightOrder} lg:col-span-${spans[1]}">${right ? renderBlock(right.block) : ""}</div>
+      </div>`;
+  }
+
+  // Icon / image with size + style options
+  function renderImage(b) {
+    const size = (b.size || "m"); // s | m | l | xl
+    const style = (b.style || "plain"); // plain | nest
+    const map = { s: "h-12 w-12", m: "h-16 w-16", l: "h-24 w-24", xl: "h-28 w-28 md:h-32 md:w-32" };
+    const imgCls = map[size] || map.m;
+
+    if (style === "nest") {
+      // Use utilities (not .icon-nest) so we can scale freely
+      return `
+        <div class="rounded-full bg-pebbleTeal-50 flex items-center justify-center ${imgCls} mx-auto lg:mx-0">
+          <img src="${b.src}" alt="${escapeAttr(b.alt || "")}" class="${imgCls} object-contain p-2" />
+        </div>`;
+    }
+    return `<img src="${b.src}" alt="${escapeAttr(b.alt || "")}" class="${imgCls} object-contain mx-auto lg:mx-0" />`;
+  }
+
+  // ---------------- Screen + Nav ----------------
   function renderScreen(index) {
     const screen = course.screens[index];
     if (!screen) return;
@@ -36,9 +97,14 @@
     const wrap = document.createElement("div");
     wrap.className = "space-y-6 animate-fade-in";
 
+    // If author supplied a screen header inside blocks, we don't duplicate.
+    const maybeTitle = screen.title
+      ? `<h1 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-2">${escapeHtml(screen.title)}</h1>`
+      : "";
+
     wrap.innerHTML = `
-      <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-2">${escapeHtml(screen.title)}</h1>
-      <div class="space-y-4">
+      ${maybeTitle}
+      <div class="space-y-6">
         ${screen.blocks.map(renderBlock).join("")}
       </div>
     `;
@@ -67,7 +133,6 @@
       nav.id = "course-nav";
       document.body.appendChild(nav);
     }
-
     nav.className = `fixed inset-x-0 bottom-4 z-20 px-4`;
 
     nav.innerHTML = `
@@ -82,18 +147,16 @@
                        focus:outline-none focus-visible:ring-2 focus-visible:ring-pebbleTeal-200
                        md:px-3 md:py-2 md:rounded-lg md:border md:border-border md:bg-surface md:hover:bg-canvas md:focus-visible:ring-4"
                 aria-label="Go to previous: ${escapeAttr(prevLabel)}">
-                <!-- Mobile -->
                 <span class="md:hidden">← Back</span>
-                <!-- Desktop -->
                 <span class="hidden md:inline block truncate">← ${escapeHtml(prevLabel)}</span>
               </button>
             `}
           </div>
 
-          <!-- Center: progress bar -->
+          <!-- Center: thin progress bar -->
           <div class="justify-self-center w-full max-w-xs">
-            <div class="h-2 rounded-full bg-track overflow-hidden">
-              <div class="h-2 rounded-full bg-pebbleTeal-500" style="width:${pct}%"></div>
+            <div class="h-1.5 rounded-full bg-track overflow-hidden">
+              <div class="h-1.5 rounded-full bg-pebbleTeal-500" style="width:${pct}%"></div>
             </div>
           </div>
 
@@ -144,15 +207,18 @@
     window.location.href = "/learn.html";
   }
 
+  // Keyboard shortcuts
   window.addEventListener("keydown", (e) => {
     if (e.key === "ArrowLeft" && current > 0) navTo(current - 1);
     if (e.key === "ArrowRight" && current < course.screens.length - 1) navTo(current + 1);
   });
 
+  // ---------------- Utils ----------------
   function escapeHtml(s = "") {
     return s.replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
   }
   function escapeAttr(s = "") { return escapeHtml(s); }
 
+  // Initial render
   renderScreen(current);
 })();
