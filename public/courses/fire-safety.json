@@ -1,17 +1,48 @@
 {
   "id": "fire-safety",
-  "title": "Fire Safety",
+  "title": "Welcome to Fire Safety",
   "screens": [
     {
       "id": "intro",
+      "label": "Welcome",
       "title": "Welcome to Fire Safety",
       "blocks": [
-        { "type": "text", "text": "This short module will help you understand the basics of fire safety." },
-        { "type": "image", "src": "/assets/icons/fire.png" }
+        {
+          "type": "group",
+          "layout": "split",
+          "ratio": "40-60",
+          "stack": "ltr",
+          "align": "center",
+          "gap": "lg",
+          "items": [
+            {
+              "slot": "left",
+              "block": {
+                "type": "image",
+                "src": "/assets/icons/fire.png",
+                "alt": "Fire icon",
+                "style": "nest",
+                "size": "xl"
+              }
+            },
+            {
+              "slot": "right",
+              "block": {
+                "type": "group",
+                "layout": "full",
+                "items": [
+                  { "block": { "type": "header", "text": "Welcome to Fire Safety" } },
+                  { "block": { "type": "text", "text": "This short module will help you understand the basics of fire safety — the common hazards to look for and the simple steps to keep people safe." } }
+                ]
+              }
+            }
+          ]
+        }
       ]
     },
     {
       "id": "outcomes",
+      "label": "Learning Outcomes",
       "title": "Learning Outcomes",
       "blocks": [
         { "type": "list", "items": [
