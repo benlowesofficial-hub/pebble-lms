@@ -7,8 +7,8 @@
   const root = document.getElementById("course-root");
   let current = 0;
 
-  // Ensure content doesn't hide behind the fixed nav
-  const NAV_RESERVED_SPACE = 96; // px
+  // Reserve space so content never hides behind the fixed nav
+  const NAV_RESERVED_SPACE = 112; // px (a touch taller to fit the new stepper)
   root.style.paddingBottom = NAV_RESERVED_SPACE + "px";
 
   // --- Render helpers --------------------------------------------------------
@@ -40,7 +40,6 @@
     const screen = course.screens[index];
     if (!screen) return;
 
-    // Fresh wrapper so animate-fade-in plays on every render
     const wrap = document.createElement("div");
     wrap.className = "space-y-6 animate-fade-in";
 
@@ -54,21 +53,21 @@
     root.innerHTML = "";
     root.appendChild(wrap);
 
-    // Re-render nav for this screen
     renderNav();
   }
 
   function renderNav() {
     const total = course.screens.length;
-    const prev = current > 0 ? course.screens[current - 1] : null;
-    const next = current < total - 1 ? course.screens[current + 1] : null;
+    const isFirst = current === 0;
+    const isLast = current === total - 1;
 
+    const prev = !isFirst ? course.screens[current - 1] : null;
+    const next = !isLast ? course.screens[current + 1] : null;
     const prevLabel = prev ? (prev.label || prev.title) : "";
     const nextLabel = next ? (next.label || next.title) : "";
 
     const pct = Math.round(((current + 1) / total) * 100);
 
-    // Create/replace fixed nav container
     let nav = document.getElementById("course-nav");
     if (!nav) {
       nav = document.createElement("div");
@@ -76,53 +75,80 @@
       document.body.appendChild(nav);
     }
 
-    nav.className = `
-      fixed inset-x-0 bottom-4 z-20
-      px-4
-    `;
+    nav.className = `fixed inset-x-0 bottom-4 z-20 px-4`;
+
+    // --- Mini stepper dots (center, consistent width) ---
+    const dots = Array.from({ length: total }, (_, i) => {
+      const active = i === current;
+      const completed = i < current;
+      const base =
+        "h-2.5 w-2.5 rounded-full transition duration-200";
+      const cls = active
+        ? `${base} bg-pebbleTeal-600`
+        : completed
+        ? `${base} bg-pebbleTeal-400`
+        : `${base} bg-track`;
+      return `<span class="${cls}"></span>`;
+    }).join("");
 
     nav.innerHTML = `
-      <div class="mx-auto max-w-5xl rounded-xl border border-border bg-surface shadow-pebble
-                  backdrop-blur p-3 md:p-4 animate-fade-in">
-        <div class="flex items-center justify-between gap-3">
-          <!-- Back -->
-          <button ${!prev ? "disabled" : ""}
-            class="px-3 md:px-4 py-2 rounded-lg border border-border bg-surface text-ink/80
-                   disabled:opacity-40 hover:bg-canvas transition
-                   focus:outline-none focus-visible:ring-4 focus-visible:ring-pebbleTeal-200"
-            aria-label="${prev ? `Go to previous: ${escapeAttr(prevLabel)}` : "No previous screen"}">
-            ← ${prev ? escapeHtml(prevLabel) : "Back"}
-          </button>
-
-          <!-- Center: step count -->
-          <div class="text-sm md:text-base font-semibold text-ink/80 select-none">
-            ${current + 1} / ${total}
+      <div class="mx-auto max-w-4xl rounded-xl border border-border bg-surface shadow-pebble backdrop-blur p-3 md:p-4 animate-fade-in">
+        <div class="grid grid-cols-3 items-center gap-3">
+          <!-- Back (hidden on first) -->
+          <div class="justify-self-start">
+            ${isFirst ? "" : `
+              <button
+                class="px-3 md:px-4 py-2 rounded-lg border border-border bg-surface text-ink/80
+                       hover:bg-canvas transition
+                       focus:outline-none focus-visible:ring-4 focus-visible:ring-pebbleTeal-200"
+                aria-label="Go to previous: ${escapeAttr(prevLabel)}">
+                ← ${escapeHtml(prevLabel)}
+              </button>
+            `}
           </div>
 
-          <!-- Next -->
-          <button ${!next ? "disabled" : ""}
-            class="px-4 md:px-5 py-2.5 rounded-lg bg-pebbleTeal-600 text-surface font-semibold
-                   hover:bg-pebbleTeal-500 disabled:opacity-40
-                   focus:outline-none focus-visible:ring-4 focus-visible:ring-pebbleTeal-200"
-            aria-label="${next ? `Go to next: ${escapeAttr(nextLabel)}` : "No next screen"}">
-            ${next ? escapeHtml(nextLabel) + " →" : "Next"}
-          </button>
+          <!-- Center: mini stepper -->
+          <div class="justify-self-center flex items-center gap-2">
+            ${dots}
+          </div>
+
+          <!-- Next / Finish -->
+          <div class="justify-self-end">
+            ${isLast ? `
+              <button
+                class="px-4 md:px-5 py-2.5 rounded-lg bg-pebbleTeal-600 text-surface font-semibold
+                       hover:bg-pebbleTeal-500
+                       focus:outline-none focus-visible:ring-4 focus-visible:ring-pebbleTeal-200"
+                aria-label="Finish course">
+                Finish
+              </button>
+            ` : `
+              <button
+                class="px-4 md:px-5 py-2.5 rounded-lg bg-pebbleTeal-600 text-surface font-semibold
+                       hover:bg-pebbleTeal-500
+                       focus:outline-none focus-visible:ring-4 focus-visible:ring-pebbleTeal-200"
+                aria-label="Go to next: ${escapeAttr(nextLabel)}">
+                ${escapeHtml(nextLabel)} →
+              </button>
+            `}
+          </div>
         </div>
 
         <!-- Progress bar -->
         <div class="mt-3 h-2.5 w-full rounded-full bg-track overflow-hidden">
-          <div class="h-2.5 rounded-full bg-pebbleTeal-500"
-               style="width:${pct}%"></div>
+          <div class="h-2.5 rounded-full bg-pebbleTeal-500" style="width:${pct}%"></div>
         </div>
       </div>
     `;
 
     // Wire up buttons
-    const [backBtn] = nav.querySelectorAll("button");
-    const nextBtn = nav.querySelectorAll("button")[1];
+    const backBtn = nav.querySelector('button[aria-label^="Go to previous"]');
+    const nextBtn = nav.querySelector('button[aria-label^="Go to next"]');
+    const finishBtn = nav.querySelector('button[aria-label="Finish course"]');
 
     backBtn && backBtn.addEventListener("click", () => navTo(current - 1));
     nextBtn && nextBtn.addEventListener("click", () => navTo(current + 1));
+    finishBtn && finishBtn.addEventListener("click", () => onFinish());
   }
 
   function navTo(i) {
@@ -131,10 +157,15 @@
     renderScreen(current);
   }
 
+  function onFinish() {
+    // Placeholder finish action: return to training list
+    window.location.href = "/learn.html";
+  }
+
   // Keyboard shortcuts: Left/Right arrows
   window.addEventListener("keydown", (e) => {
-    if (e.key === "ArrowLeft") navTo(current - 1);
-    if (e.key === "ArrowRight") navTo(current + 1);
+    if (e.key === "ArrowLeft" && current > 0) navTo(current - 1);
+    if (e.key === "ArrowRight" && current < course.screens.length - 1) navTo(current + 1);
   });
 
   // --- Escape helpers --------------------------------------------------------
@@ -146,4 +177,5 @@
   // Initial render
   renderScreen(current);
 })();
+
 
