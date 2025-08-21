@@ -1,6 +1,11 @@
 // /public/course.js
 (async function () {
+  // Load course JSON
   const res = await fetch("/courses/fire-safety.json");
+  if (!res.ok) {
+    console.error("Failed to load course JSON", res.status, res.statusText);
+    return;
+  }
   const course = await res.json();
 
   const root = document.getElementById("course-root");
@@ -8,6 +13,13 @@
 
   const NAV_RESERVED_SPACE = 112;
   root.style.paddingBottom = NAV_RESERVED_SPACE + "px";
+
+  // ---------- Utilities ----------
+  function cx(...parts) {
+    return parts.filter(Boolean).join(" ");
+  }
+  function escapeHtml(s=""){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+  function escapeAttr(s=""){return escapeHtml(s);}
 
   // ---------- Block renderers ----------
   function renderBlock(block) {
@@ -27,21 +39,32 @@
     const layout = g.layout || "full";         // "full" | "split"
     const ratio  = g.ratio  || "50-50";        // "50-50" | "40-60" | "60-40"
     const stack  = g.stack  || "ltr";          // "ltr" | "rtl"
-    const gap    = g.gap    || "lg";           // "sm" | "md" | "lg"
+    const gap    = g.gap    || (g.compact ? "md" : "lg"); // "sm" | "md" | "lg"
     const align  = g.align  || "center";       // "start" | "center"
+    const compact = !!g.compact;               // tighter spacing if true
+    const maxWidth = g.maxWidth || null;       // null | "md" | "lg"
+    const divider = g.divider || "none";       // "none" | "horizontal" | "vertical"
+    const textClamp = g.textClamp || null;     // e.g. "36ch" | "42ch"
 
     const gapCls   = gap === "sm" ? "gap-4" : gap === "md" ? "gap-6" : "gap-10";
     const alignCls = align === "start" ? "lg:items-start" : "lg:items-center";
-    const base     = `grid grid-cols-1 ${gapCls} lg:grid-cols-12 ${alignCls}`;
+    const baseGrid = `grid grid-cols-1 ${gapCls} lg:grid-cols-12 ${alignCls}`;
+    const maxWCls  = maxWidth === "md" ? "max-w-3xl mx-auto"
+                  : maxWidth === "lg" ? "max-w-4xl mx-auto"
+                  : "";
+
+    // Horizontal divider (hairline) for the whole group (appears above content)
+    const showHRule = divider === "horizontal";
 
     if (layout === "full") {
       return `
-        <div class="${base}">
+        <div class="${cx(baseGrid, maxWCls)}">
+          ${showHRule ? `<div class="lg:col-span-12 border-b border-border/70 -mt-1 mb-4"></div>` : ""}
           ${(g.items || []).map(it => `<div class="lg:col-span-12">${renderBlock(it.block)}</div>`).join("")}
         </div>`;
     }
 
-    // --- split: use literal col-span classes so Tailwind never purges them ---
+    // --- split layout ---
     const spanMap = {
       "50-50": ["lg:col-span-6", "lg:col-span-6"],
       "40-60": ["lg:col-span-5", "lg:col-span-7"],
@@ -55,43 +78,55 @@
     const left  = (g.items || []).find(i => i.slot === "left");
     const right = (g.items || []).find(i => i.slot === "right");
 
+    // Optional vertical divider (lg+ only)
+    const vDivider = divider === "vertical"
+      ? `<div class="hidden lg:block lg:col-span-0 relative">
+           <div class="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-px bg-border"></div>
+         </div>`
+      : "";
+
+    // Text clamping class (inline style for exact ch value)
+    const textStyle = textClamp ? `style="max-width:${textClamp}"` : "";
+
     return `
-      <div class="${base}">
+      <div class="${cx(baseGrid, maxWCls, compact ? "mt-2" : "")}">
+        ${showHRule ? `<div class="lg:col-span-12 border-b border-border/70 -mt-1 mb-4"></div>` : ""}
         <div class="${leftOrder} ${leftSpan}">${left ? renderBlock(left.block) : ""}</div>
-        <div class="${rightOrder} ${rightSpan}">${right ? renderBlock(right.block) : ""}</div>
+        ${vDivider}
+        <div class="${rightOrder} ${rightSpan}" ${textStyle}>${right ? renderBlock(right.block) : ""}</div>
       </div>`;
   }
 
   function renderImage(b) {
-  const size  = b.size  || "m";     // s | m | l | xl | xxl
-  const style = b.style || "plain"; // plain | nest
+    const size  = b.size  || "m";     // s | m | l | xl | xxl
+    const style = b.style || "plain"; // plain | nest
 
-  const outer = {
-    s: "h-16 w-16",
-    m: "h-20 w-20",
-    l: "h-28 w-28",
-    xl: "h-36 w-36 md:h-40 md:w-40",
-    xxl: "h-48 w-48 md:h-56 md:w-56" // NEW: bigger size
-  };
-  const outerCls = outer[size] || outer.m;
+    const outer = {
+      s: "h-16 w-16",
+      m: "h-20 w-20",
+      l: "h-28 w-28",
+      xl: "h-36 w-36 md:h-40 md:w-40",
+      xxl: "h-48 w-48 md:h-56 md:w-56"
+    };
+    const outerCls = outer[size] || outer.m;
 
-  if (style === "nest") {
-    return `
-      <div class="rounded-full bg-pebbleTeal-400/10 flex items-center justify-center ${outerCls} mx-auto lg:mx-0">
-        <img src="${b.src}" alt="${escapeAttr(b.alt || "")}" class="h-3/4 w-3/4 object-contain" />
-      </div>`;
+    if (style === "nest") {
+      return `
+        <div class="rounded-full bg-pebbleTeal-400/10 flex items-center justify-center ${outerCls} mx-auto lg:mx-0">
+          <img src="${b.src}" alt="${escapeAttr(b.alt || "")}" class="h-3/4 w-3/4 object-contain" />
+        </div>`;
+    }
+    const img = {
+      s: "h-12 w-12",
+      m: "h-16 w-16",
+      l: "h-24 w-24",
+      xl: "h-28 w-28 md:h-32 md:w-32",
+      xxl: "h-40 w-40 md:h-48 md:w-48"
+    };
+    const imgCls = img[size] || img.m;
+    return `<img src="${b.src}" alt="${escapeAttr(b.alt || "")}" class="${imgCls} object-contain mx-auto lg:mx-0" />`;
   }
 
-  const img = {
-    s: "h-12 w-12",
-    m: "h-16 w-16",
-    l: "h-24 w-24",
-    xl: "h-28 w-28 md:h-32 md:w-32",
-    xxl: "h-40 w-40 md:h-48 md:w-48" // NEW
-  };
-  const imgCls = img[size] || img.m;
-  return `<img src="${b.src}" alt="${escapeAttr(b.alt || "")}" class="${imgCls} object-contain mx-auto lg:mx-0" />`;
-}
   // ---------- Screen + Nav ----------
   function renderScreen(index) {
     const screen = course.screens[index];
@@ -101,7 +136,10 @@
     wrap.className = "space-y-6 animate-fade-in";
 
     const maybeTitle = screen.title
-      ? `<h1 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-2">${escapeHtml(screen.title)}</h1>`
+      ? `<div class="mb-2">
+           <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight">${escapeHtml(screen.title)}</h1>
+           ${screen.titleRule ? `<div class="mt-3 h-px bg-border"></div>` : ""}
+         </div>`
       : "";
 
     wrap.innerHTML = `
@@ -201,10 +239,6 @@
     if (e.key === "ArrowRight" && current < course.screens.length - 1) navTo(current + 1);
   });
 
-  function escapeHtml(s=""){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
-  function escapeAttr(s=""){return escapeHtml(s);}
-
+  // initial render
   renderScreen(current);
 })();
-
-
