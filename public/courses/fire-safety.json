@@ -10,7 +10,7 @@
         {
           "type": "group",
           "layout": "split",
-          "ratio": "60-40",                 // give the icon more space
+          "ratio": "40-60",
           "stack": "ltr",
           "align": "center",
           "gap": "lg",
@@ -22,7 +22,7 @@
                 "src": "/assets/icons/fire.png",
                 "alt": "Fire icon",
                 "style": "nest",
-                "size": "xxl"               // NEW: much bigger
+                "size": "xl"
               }
             },
             {
