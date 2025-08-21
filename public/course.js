@@ -63,23 +63,35 @@
   }
 
   function renderImage(b) {
-    const size  = b.size  || "m";     // s | m | l | xl
-    const style = b.style || "plain"; // plain | nest
+  const size  = b.size  || "m";     // s | m | l | xl | xxl
+  const style = b.style || "plain"; // plain | nest
 
-    const outer = { s: "h-16 w-16", m: "h-20 w-20", l: "h-28 w-28", xl: "h-36 w-36 md:h-40 md:w-40" };
-    const outerCls = outer[size] || outer.m;
+  const outer = {
+    s: "h-16 w-16",
+    m: "h-20 w-20",
+    l: "h-28 w-28",
+    xl: "h-36 w-36 md:h-40 md:w-40",
+    xxl: "h-48 w-48 md:h-56 md:w-56" // NEW: bigger size
+  };
+  const outerCls = outer[size] || outer.m;
 
-    if (style === "nest") {
-      return `
-        <div class="rounded-full bg-pebbleTeal/10 flex items-center justify-center ${outerCls} mx-auto lg:mx-0">
-          <img src="${b.src}" alt="${escapeAttr(b.alt || "")}" class="h-3/4 w-3/4 object-contain" />
-        </div>`;
-    }
-    const img = { s: "h-12 w-12", m: "h-16 w-16", l: "h-24 w-24", xl: "h-28 w-28 md:h-32 md:w-32" };
-    const imgCls = img[size] || img.m;
-    return `<img src="${b.src}" alt="${escapeAttr(b.alt || "")}" class="${imgCls} object-contain mx-auto lg:mx-0" />`;
+  if (style === "nest") {
+    return `
+      <div class="rounded-full bg-pebbleTeal-400/10 flex items-center justify-center ${outerCls} mx-auto lg:mx-0">
+        <img src="${b.src}" alt="${escapeAttr(b.alt || "")}" class="h-3/4 w-3/4 object-contain" />
+      </div>`;
   }
 
+  const img = {
+    s: "h-12 w-12",
+    m: "h-16 w-16",
+    l: "h-24 w-24",
+    xl: "h-28 w-28 md:h-32 md:w-32",
+    xxl: "h-40 w-40 md:h-48 md:w-48" // NEW
+  };
+  const imgCls = img[size] || img.m;
+  return `<img src="${b.src}" alt="${escapeAttr(b.alt || "")}" class="${imgCls} object-contain mx-auto lg:mx-0" />`;
+}
   // ---------- Screen + Nav ----------
   function renderScreen(index) {
     const screen = course.screens[index];
