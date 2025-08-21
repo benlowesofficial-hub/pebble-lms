@@ -6,14 +6,19 @@
       "id": "intro",
       "label": "Welcome",
       "title": "Welcome to Fire Safety",
+      "titleRule": true,
       "blocks": [
         {
           "type": "group",
           "layout": "split",
-          "ratio": "40-60",
+          "ratio": "50-50",
           "stack": "ltr",
           "align": "center",
-          "gap": "lg",
+          "gap": "md",
+          "compact": true,
+          "maxWidth": "lg",
+          "divider": "vertical",
+          "textClamp": "42ch",
           "items": [
             {
               "slot": "left",
