@@ -206,8 +206,5 @@
 
   renderScreen(current);
 })();
-  function escapeAttr(s=""){return escapeHtml(s);}
 
-  renderScreen(current);
-})();
 
