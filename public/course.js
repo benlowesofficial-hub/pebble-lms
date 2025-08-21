@@ -182,9 +182,6 @@ const rightColExtras = divider === "vertical"
 }
 
 
-    renderNav();
-  }
-
   function renderNav() {
     const total = course.screens.length;
     const isFirst = current === 0;
