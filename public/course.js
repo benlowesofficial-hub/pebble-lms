@@ -80,9 +80,9 @@
 
     // IMPORTANT: Do NOT insert an extra element between columns (it causes wrapping).
     // For a vertical divider, apply a left-border on the RIGHT column at lg+.
-    const rightColExtras = divider === "vertical"
-      ? "lg:border-l lg:border-border lg:pl-8"
-      : "";
+const rightColExtras = divider === "vertical"
+  ? "lg:border-l lg:border-border lg:pl-4"   // slimmer gutter so columns sit closer
+  : "";
 
     // Text clamp width on the right column helps balance with large visuals.
     const rightStyle = textClamp ? `style="max-width:${textClamp}"` : "";
@@ -127,28 +127,60 @@
 
   // ---------- Screen + Nav ----------
   function renderScreen(index) {
-    const screen = course.screens[index];
-    if (!screen) return;
+  const screen = course.screens[index];
+  if (!screen) return;
 
-    const wrap = document.createElement("div");
-    wrap.className = "space-y-6 animate-fade-in";
+  const wrap = document.createElement("div");
+  wrap.className = "space-y-6 animate-fade-in";
 
-    const maybeTitle = screen.title
-      ? `<div class="mb-2">
-           <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight">${escapeHtml(screen.title)}</h1>
-           ${screen.titleRule ? `<div class="mt-3 h-px bg-border"></div>` : ""}
-         </div>`
-      : "";
+  const maybeTitle = screen.title
+    ? `<div class="mb-2">
+         <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight">${escapeHtml(screen.title)}</h1>
+         ${screen.titleRule ? `<div class="mt-3 h-px bg-border"></div>` : ""}
+       </div>`
+    : "";
 
-    wrap.innerHTML = `
-      ${maybeTitle}
-      <div class="space-y-6">
-        ${screen.blocks.map(renderBlock).join("")}
-      </div>
-    `;
+  // inner body we can measure & center if there is spare vertical space
+  const body = document.createElement("div");
+  body.className = "space-y-6";
+  body.innerHTML = screen.blocks.map(renderBlock).join("");
 
-    root.innerHTML = "";
-    root.appendChild(wrap);
+  wrap.innerHTML = `${maybeTitle}`;
+  wrap.appendChild(body);
+
+  // mount first so sizes are real
+  root.innerHTML = "";
+  root.appendChild(wrap);
+
+  // --- Vertical centering for short screens ---
+  // available height = viewport - header - reserved nav space - top padding of main
+  const headerEl = document.querySelector("header");
+  const headerH = headerEl ? headerEl.offsetHeight : 0;
+  const navReserve = typeof NAV_RESERVED_SPACE === "number" ? NAV_RESERVED_SPACE : 112;
+
+  // root has top/bottom padding from the page (e.g., py-10). Capture it to avoid miscalc.
+  const rootStyles = window.getComputedStyle(root);
+  const rootPadTop = parseFloat(rootStyles.paddingTop) || 0;
+  const rootPadBottom = parseFloat(rootStyles.paddingBottom) || 0;
+
+  const available = window.innerHeight - headerH - navReserve - rootPadTop - rootPadBottom;
+
+  // body height (content only)
+  const bodyH = body.offsetHeight;
+
+  // If the content is shorter than available space, center it vertically.
+  if (bodyH < available) {
+    body.style.minHeight = `${available}px`;
+    body.style.display = "flex";
+    body.style.flexDirection = "column";
+    body.style.justifyContent = "center";
+    // keep a little breathing room above/below the heading rule
+    body.style.gap = "1.25rem";
+  }
+
+  renderNav();
+}
+
 
     renderNav();
   }
