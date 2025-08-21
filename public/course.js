@@ -41,7 +41,7 @@
     const stack  = g.stack  || "ltr";          // "ltr" | "rtl"
     const gap    = g.gap    || (g.compact ? "md" : "lg"); // "sm" | "md" | "lg"
     const align  = g.align  || "center";       // "start" | "center"
-    const compact = !!g.compact;               // tighter spacing if true
+    const compact = !!g.compact;
     const maxWidth = g.maxWidth || null;       // null | "md" | "lg"
     const divider = g.divider || "none";       // "none" | "horizontal" | "vertical"
     const textClamp = g.textClamp || null;     // e.g. "36ch" | "42ch"
@@ -78,22 +78,20 @@
     const left  = (g.items || []).find(i => i.slot === "left");
     const right = (g.items || []).find(i => i.slot === "right");
 
-    // Optional vertical divider (lg+ only)
-    const vDivider = divider === "vertical"
-      ? `<div class="hidden lg:block lg:col-span-0 relative">
-           <div class="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-px bg-border"></div>
-         </div>`
+    // IMPORTANT: Do NOT insert an extra element between columns (it causes wrapping).
+    // For a vertical divider, apply a left-border on the RIGHT column at lg+.
+    const rightColExtras = divider === "vertical"
+      ? "lg:border-l lg:border-border lg:pl-8"
       : "";
 
-    // Text clamping class (inline style for exact ch value)
-    const textStyle = textClamp ? `style="max-width:${textClamp}"` : "";
+    // Text clamp width on the right column helps balance with large visuals.
+    const rightStyle = textClamp ? `style="max-width:${textClamp}"` : "";
 
     return `
-      <div class="${cx(baseGrid, maxWCls, compact ? "mt-2" : "")}">
+      <div class="${cx(baseGrid, maxWCls, compact ? "mt-2" : "", "items-center")}">
         ${showHRule ? `<div class="lg:col-span-12 border-b border-border/70 -mt-1 mb-4"></div>` : ""}
         <div class="${leftOrder} ${leftSpan}">${left ? renderBlock(left.block) : ""}</div>
-        ${vDivider}
-        <div class="${rightOrder} ${rightSpan}" ${textStyle}>${right ? renderBlock(right.block) : ""}</div>
+        <div class="${rightOrder} ${rightSpan} ${rightColExtras}" ${rightStyle}>${right ? renderBlock(right.block) : ""}</div>
       </div>`;
   }
 
