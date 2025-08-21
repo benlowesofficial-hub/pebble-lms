@@ -11,13 +11,13 @@
         {
           "type": "group",
           "layout": "split",
-          "ratio": "50-50",
+          "ratio": "60-40",
           "stack": "ltr",
           "align": "center",
-          "gap": "md",
+          "gap": "sm",
           "compact": true,
           "maxWidth": "lg",
-          "divider": "vertical",
+          "divider": "none",
           "textClamp": "42ch",
           "items": [
             {
