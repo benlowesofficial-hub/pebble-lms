@@ -210,3 +210,4 @@
 
   renderScreen(current);
 })();
+;
