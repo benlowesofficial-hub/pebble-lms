@@ -14,12 +14,12 @@
     switch (block.type) {
       case "group":  return renderGroup(block);
       case "header": return `<h2 class="text-[22px] font-extrabold leading-tight">${escapeHtml(block.text)}</h2>`;
-      case "text":   return `<p class="text-lg text-charcoal/70">${escapeHtml(block.text)}</p>`;
+      case "text":   return `<p class="text-lg text-inkMuted">${escapeHtml(block.text)}</p>`;
       case "image":  return renderImage(block);
       case "list":
         return `<ul class="list-disc pl-6 space-y-1 text-lg">${block.items.map(i => `<li>${escapeHtml(i)}</li>`).join("")}</ul>`;
       default:
-        return `<div class="p-4 border border-black/10 rounded text-sm opacity-70">[${block.type}] not implemented</div>`;
+        return `<div class="p-4 border border-border rounded text-sm opacity-70">[${block.type}] not implemented</div>`;
     }
   }
 
@@ -41,7 +41,7 @@
         </div>`;
     }
 
-    // --- split: literal col-span classes so Tailwind never purges them ---
+    // --- split: use literal col-span classes so Tailwind never purges them ---
     const spanMap = {
       "50-50": ["lg:col-span-6", "lg:col-span-6"],
       "40-60": ["lg:col-span-5", "lg:col-span-7"],
@@ -63,17 +63,10 @@
   }
 
   function renderImage(b) {
-    const size  = b.size  || "m";     // s | m | l | xl | xxl
+    const size  = b.size  || "m";     // s | m | l | xl
     const style = b.style || "plain"; // plain | nest
 
-    // OUTER (nest circle) sizes
-    const outer = {
-      s: "h-16 w-16",
-      m: "h-20 w-20",
-      l: "h-28 w-28",
-      xl: "h-36 w-36 md:h-40 md:w-40",
-      xxl: "h-48 w-48 md:h-56 md:w-56"    // NEW: much bigger
-    };
+    const outer = { s: "h-16 w-16", m: "h-20 w-20", l: "h-28 w-28", xl: "h-36 w-36 md:h-40 md:w-40" };
     const outerCls = outer[size] || outer.m;
 
     if (style === "nest") {
@@ -82,15 +75,7 @@
           <img src="${b.src}" alt="${escapeAttr(b.alt || "")}" class="h-3/4 w-3/4 object-contain" />
         </div>`;
     }
-
-    // Image-only sizes
-    const img = {
-      s: "h-12 w-12",
-      m: "h-16 w-16",
-      l: "h-24 w-24",
-      xl: "h-28 w-28 md:h-32 md:w-32",
-      xxl: "h-40 w-40 md:h-48 md:w-48"
-    };
+    const img = { s: "h-12 w-12", m: "h-16 w-16", l: "h-24 w-24", xl: "h-28 w-28 md:h-32 md:w-32" };
     const imgCls = img[size] || img.m;
     return `<img src="${b.src}" alt="${escapeAttr(b.alt || "")}" class="${imgCls} object-contain mx-auto lg:mx-0" />`;
   }
@@ -141,15 +126,15 @@
     nav.className = `fixed inset-x-0 bottom-4 z-20 px-4`;
 
     nav.innerHTML = `
-      <div class="mx-auto max-w-4xl rounded-xl border border-black/10 bg-paper/80 shadow-pebble backdrop-blur p-3 md:p-4 animate-fade-in">
+      <div class="mx-auto max-w-4xl rounded-xl border border-border bg-surface shadow-pebble backdrop-blur p-3 md:p-4 animate-fade-in">
         <div class="grid grid-cols-3 items-center gap-3">
           <div class="justify-self-start min-w-0">
             ${isFirst ? "" : `
               <button
-                class="px-2 py-1 text-pebbleTeal font-semibold whitespace-nowrap min-w-0 max-w-full
-                       border-b-2 border-transparent hover:border-pebbleTeal
-                       focus:outline-none focus-visible:ring-2 focus-visible:ring-pebbleTeal/30
-                       md:px-3 md:py-2 md:rounded-lg md:border md:border-black/10 md:bg-paper md:hover:bg-paper/70 md:focus-visible:ring-4"
+                class="px-2 py-1 text-pebbleTeal-600 font-semibold whitespace-nowrap min-w-0 max-w-full
+                       border-b-2 border-transparent hover:border-pebbleTeal-500
+                       focus:outline-none focus-visible:ring-2 focus-visible:ring-pebbleTeal-200
+                       md:px-3 md:py-2 md:rounded-lg md:border md:border-border md:bg-surface md:hover:bg-canvas md:focus-visible:ring-4"
                 aria-label="Go to previous: ${escapeAttr(prevLabel)}">
                 <span class="md:hidden">← Back</span>
                 <span class="hidden md:inline block truncate">← ${escapeHtml(prevLabel)}</span>
@@ -158,25 +143,25 @@
           </div>
 
           <div class="justify-self-center w-full max-w-xs">
-            <div class="h-1.5 rounded-full bg-black/10 overflow-hidden">
-              <div class="h-1.5 rounded-full bg-pebbleTeal" style="width:${pct}%"></div>
+            <div class="h-1.5 rounded-full bg-track overflow-hidden">
+              <div class="h-1.5 rounded-full bg-pebbleTeal-500" style="width:${pct}%"></div>
             </div>
           </div>
 
           <div class="justify-self-end min-w-0">
             ${isLast ? `
               <button
-                class="px-2 py-1 text-pebbleTeal font-semibold border-b-2 border-transparent
-                       hover:border-pebbleTeal whitespace-nowrap
-                       focus:outline-none focus-visible:ring-2 focus-visible:ring-pebbleTeal/30
-                       md:px-4 md:py-2.5 md:rounded-lg md:bg-pebbleTeal md:text-paper md:hover:opacity-90 md:focus-visible:ring-4"
+                class="px-2 py-1 text-pebbleTeal-600 font-semibold border-b-2 border-transparent
+                       hover:border-pebbleTeal-500 whitespace-nowrap
+                       focus:outline-none focus-visible:ring-2 focus-visible:ring-pebbleTeal-200
+                       md:px-4 md:py-2.5 md:rounded-lg md:bg-pebbleTeal-600 md:text-surface md:hover:bg-pebbleTeal-500 md:focus-visible:ring-4"
                 aria-label="Finish course">Finish</button>
             ` : `
               <button
-                class="px-2 py-1 text-pebbleTeal font-semibold border-b-2 border-transparent
-                       hover:border-pebbleTeal whitespace-nowrap min-w-0 max-w-full
-                       focus:outline-none focus-visible:ring-2 focus-visible:ring-pebbleTeal/30
-                       md:px-4 md:py-2.5 md:rounded-lg md:bg-pebbleTeal md:text-paper md:hover:opacity-90 md:focus-visible:ring-4"
+                class="px-2 py-1 text-pebbleTeal-600 font-semibold border-b-2 border-transparent
+                       hover:border-pebbleTeal-500 whitespace-nowrap min-w-0 max-w-full
+                       focus:outline-none focus-visible:ring-2 focus-visible:ring-pebbleTeal-200
+                       md:px-4 md:py-2.5 md:rounded-lg md:bg-pebbleTeal-600 md:text-surface md:hover:bg-pebbleTeal-500 md:focus-visible:ring-4"
                 aria-label="Go to next: ${escapeAttr(nextLabel)}">
                 <span class="md:hidden">Next →</span>
                 <span class="hidden md:inline block truncate">${escapeHtml(nextLabel)} →</span>
@@ -205,6 +190,10 @@
   });
 
   function escapeHtml(s=""){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+  function escapeAttr(s=""){return escapeHtml(s);}
+
+  renderScreen(current);
+})();
   function escapeAttr(s=""){return escapeHtml(s);}
 
   renderScreen(current);
