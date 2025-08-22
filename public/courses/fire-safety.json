@@ -10,21 +10,13 @@
         {
           "id": "row1",
           "blocks": [
-            {
-              "id": "h1",
-              "type": "header",
-              "data": { "text": "Welcome to Fire Safety" }
-            }
+            { "id": "h1", "type": "header", "data": { "text": "Welcome to Fire Safety" } }
           ]
         },
         {
           "id": "row2",
           "blocks": [
-            {
-              "id": "t1",
-              "type": "text",
-              "data": { "text": "This short demo shows how different block types render in Pebble." }
-            }
+            { "id": "t1", "type": "text", "data": { "text": "This short demo shows how different block types render in Pebble." } }
           ]
         },
         {
@@ -33,12 +25,7 @@
             {
               "id": "i1",
               "type": "icon",
-              "data": {
-                "src": "/assets/icons/fire.png",
-                "alt": "Fire icon",
-                "style": "nest",
-                "size": "l"
-              }
+              "data": { "src": "/assets/icons/fire.png", "alt": "Fire icon", "style": "nest", "size": "l" }
             },
             {
               "id": "t2",
@@ -49,7 +36,6 @@
         }
       ]
     },
-
     {
       "id": "images",
       "title": "Images",
@@ -57,14 +43,7 @@
         {
           "id": "row1",
           "blocks": [
-            {
-              "id": "img1",
-              "type": "image",
-              "data": {
-                "src": "/assets/fire.png",
-                "alt": "Simple fire graphic"
-              }
-            }
+            { "id": "img1", "type": "image", "data": { "src": "/assets/fire.png", "alt": "Simple fire graphic" } }
           ]
         },
         {
@@ -91,7 +70,6 @@
         }
       ]
     },
-
     {
       "id": "accordion",
       "title": "Accordion",
@@ -114,40 +92,33 @@
         }
       ]
     },
-
     {
-  "id": "icon-accordion",
-  "title": "Icon + Accordion Test",
-  "rows": [
-    {
-      "id": "row1",
-      "blocks": [
+      "id": "icon-accordion",
+      "title": "Icon + Accordion Test",
+      "rows": [
         {
-          "id": "i2",
-          "type": "icon",
-          "data": {
-            "src": "/assets/icons/fire.png",
-            "alt": "Fire icon",
-            "style": "nest",
-            "size": "l"
-          }
-        },
-        {
-          "id": "acc2",
-          "type": "accordion",
-          "data": {
-            "tabs": [
-              { "id": "fuel", "title": "Fuel", "content": "Something that can burn." },
-              { "id": "heat", "title": "Heat", "content": "A source of ignition." },
-              { "id": "oxygen", "title": "Oxygen", "content": "Air to sustain the fire." }
-            ]
-          }
+          "id": "row1",
+          "blocks": [
+            {
+              "id": "i2",
+              "type": "icon",
+              "data": { "src": "/assets/icons/fire.png", "alt": "Fire icon", "style": "nest", "size": "l" }
+            },
+            {
+              "id": "acc2",
+              "type": "accordion",
+              "data": {
+                "tabs": [
+                  { "id": "fuel", "title": "Fuel", "content": "Something that can burn." },
+                  { "id": "heat", "title": "Heat", "content": "A source of ignition." },
+                  { "id": "oxygen", "title": "Oxygen", "content": "Air to sustain the fire." }
+                ]
+              }
+            }
+          ]
         }
       ]
-    }
-  ]
-}
-
+    },
     {
       "id": "quiz",
       "title": "Knowledge Check",
@@ -175,3 +146,4 @@
     }
   ]
 }
+
