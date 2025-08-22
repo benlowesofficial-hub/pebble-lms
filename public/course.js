@@ -181,16 +181,23 @@
 
   // ---------- Row + Section renderers ----------
   function renderRow(row) {
-    const cols = row.blocks.length;
-    const gridCls = cols === 1
-      ? "grid grid-cols-1"
-      : `grid grid-cols-1 lg:grid-cols-${cols} gap-6`;
+  const cols = row.blocks.length;
 
-    return `
-      <div class="${gridCls}">
-        ${row.blocks.map(b => `<div>${renderBlock(b)}</div>`).join("")}
-      </div>`;
-  }
+  // Explicit map so Tailwind sees real class names at build time
+  const gridMap = {
+    1: "grid grid-cols-1",
+    2: "grid grid-cols-1 lg:grid-cols-2 gap-6",
+    3: "grid grid-cols-1 lg:grid-cols-3 gap-6",
+    4: "grid grid-cols-1 lg:grid-cols-4 gap-6"
+  };
+
+  const gridCls = gridMap[cols] || "grid grid-cols-1 lg:grid-cols-2 gap-6";
+
+  return `
+    <div class="${gridCls}">
+      ${row.blocks.map(b => `<div>${renderBlock(b)}</div>`).join("")}
+    </div>`;
+}
 
   function renderBlock(block) {
     const entry = registry[block.type];
