@@ -1,47 +1,112 @@
 {
   "id": "fire-safety",
-  "title": "Welcome to Fire Safety",
-  "screens": [
+  "title": "Fire Safety (Demo)",
+  "est_minutes": 10,
+  "sections": [
     {
       "id": "intro",
-      "label": "Welcome",
-      "title": "Welcome to Fire Safety",
-      "titleRule": true,
-      "blocks": [
+      "title": "Welcome",
+      "rows": [
         {
-          "type": "group",
-          "layout": "split",
-          "ratio": "60-40",
-          "stack": "ltr",
-          "align": "center",
-          "gap": "sm",
-          "compact": true,
-          "maxWidth": "lg",
-          "divider": "none",
-          "textClamp": "42ch",
-          "items": [
+          "id": "row1",
+          "blocks": [
             {
-              "slot": "left",
-              "block": {
-                "type": "image",
+              "id": "h1",
+              "type": "header",
+              "data": { "text": "Welcome to Fire Safety" }
+            }
+          ]
+        },
+        {
+          "id": "row2",
+          "blocks": [
+            {
+              "id": "t1",
+              "type": "text",
+              "data": { "text": "This short demo shows how different block types render in Pebble." }
+            }
+          ]
+        },
+        {
+          "id": "row3",
+          "blocks": [
+            {
+              "id": "i1",
+              "type": "icon",
+              "data": {
                 "src": "/assets/icons/fire.png",
                 "alt": "Fire icon",
                 "style": "nest",
-                "size": "xxl"
+                "size": "l"
               }
             },
             {
-              "slot": "right",
-              "block": {
-                "type": "group",
-                "layout": "full",
-                "items": [
-                  {
-                    "block": {
-                      "type": "text",
-                      "text": "This short module will help you understand the basics of fire safety — the common hazards to look for and the simple steps to keep people safe."
-                    }
-                  }
+              "id": "t2",
+              "type": "text",
+              "data": { "text": "Icons can sit beside text in the same row." }
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "images",
+      "title": "Images",
+      "rows": [
+        {
+          "id": "row1",
+          "blocks": [
+            {
+              "id": "img1",
+              "type": "image",
+              "data": {
+                "src": "/assets/fire.png",
+                "alt": "Simple fire graphic"
+              }
+            }
+          ]
+        },
+        {
+          "id": "row2",
+          "blocks": [
+            {
+              "id": "multi1",
+              "type": "multiImage",
+              "data": {
+                "states": {
+                  "default": "/assets/fire.png",
+                  "alt1": "/assets/lock.png"
+                },
+                "defaultState": "default",
+                "alt": "Multi-state placeholder"
+              }
+            },
+            {
+              "id": "t3",
+              "type": "text",
+              "data": { "text": "This is a multi-state image block (currently static)." }
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "accordion",
+      "title": "Accordion",
+      "rows": [
+        {
+          "id": "row1",
+          "blocks": [
+            {
+              "id": "acc1",
+              "type": "accordion",
+              "data": {
+                "tabs": [
+                  { "id": "fuel", "title": "Fuel", "content": "Something that can burn." },
+                  { "id": "heat", "title": "Heat", "content": "A source of ignition." },
+                  { "id": "oxygen", "title": "Oxygen", "content": "Air to sustain the fire." }
                 ]
               }
             }
@@ -49,17 +114,28 @@
         }
       ]
     },
+
     {
-      "id": "outcomes",
-      "label": "Learning Outcomes",
-      "title": "Learning Outcomes",
-      "blocks": [
+      "id": "quiz",
+      "title": "Knowledge Check",
+      "rows": [
         {
-          "type": "list",
-          "items": [
-            "Identify common fire hazards",
-            "Know how to respond safely",
-            "Understand evacuation routes"
+          "id": "row1",
+          "blocks": [
+            {
+              "id": "q1",
+              "type": "mcq",
+              "data": {
+                "question": "Which of these is NOT part of the fire triangle?",
+                "multiple": false,
+                "options": [
+                  { "id": "fuel", "text": "Fuel", "correct": false, "feedback": "Fuel is needed." },
+                  { "id": "heat", "text": "Heat", "correct": false, "feedback": "Heat is needed." },
+                  { "id": "oxygen", "text": "Oxygen", "correct": false, "feedback": "Oxygen is needed." },
+                  { "id": "water", "text": "Water", "correct": true, "feedback": "Correct — water is not part of the triangle." }
+                ]
+              }
+            }
           ]
         }
       ]
