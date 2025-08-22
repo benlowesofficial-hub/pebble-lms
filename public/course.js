@@ -203,18 +203,36 @@ function getLayout(row) {
 function renderRow(row) {
   const cols = row.blocks.length;
 
-  // Single block row = full width
+  // Single block row → full width
   if (cols === 1) {
     return `<div class="grid grid-cols-1">${renderBlock(row.blocks[0])}</div>`;
   }
 
-  const spans = getLayout(row);
+  const types = row.blocks.map(b => b.type);
 
+  // Icon + Text → flex row
+  if (types.includes("icon") && types.includes("text")) {
+    return `
+      <div class="flex flex-col lg:flex-row gap-6 items-center">
+        <div class="flex-shrink-0 flex justify-center">${renderBlock(row.blocks[0])}</div>
+        <div class="flex-1 max-w-prose">${renderBlock(row.blocks[1])}</div>
+      </div>`;
+  }
+
+  // Image or MultiImage + Text → flex row
+  if ((types.includes("image") || types.includes("multiImage")) && types.includes("text")) {
+    return `
+      <div class="flex flex-col lg:flex-row gap-6 items-center">
+        <div class="flex-1 flex justify-center">${renderBlock(row.blocks[0])}</div>
+        <div class="flex-1 max-w-md">${renderBlock(row.blocks[1])}</div>
+      </div>`;
+  }
+
+  // Default = equal grid (safe fallback)
+  const span = 12 / cols;
   return `
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-      ${row.blocks.map((b, i) =>
-        `<div class="${spans[i]}">${renderBlock(b)}</div>`
-      ).join("")}
+    <div class="grid grid-cols-1 lg:grid-cols-${cols} gap-6">
+      ${row.blocks.map(b => `<div class="lg:col-span-${span}">${renderBlock(b)}</div>`).join("")}
     </div>`;
 }
 
