@@ -180,24 +180,44 @@
   };
 
   // ---------- Row + Section renderers ----------
-  function renderRow(row) {
+function getLayout(row) {
+  const types = row.blocks.map(b => b.type);
+
+  // Icon + Text combo
+  if (types.includes("icon") && types.includes("text")) {
+    // Icon smaller, text wider
+    return ["lg:col-span-4 flex justify-center", "lg:col-span-8"];
+  }
+
+  // Image + Text combo
+  if (types.includes("image") && types.includes("text")) {
+    // Image larger, text narrower
+    return ["lg:col-span-7", "lg:col-span-5"];
+  }
+
+  // Default: equal split
+  const span = 12 / row.blocks.length;
+  return Array(row.blocks.length).fill(`lg:col-span-${span}`);
+}
+
+function renderRow(row) {
   const cols = row.blocks.length;
 
-  // Explicit map so Tailwind sees real class names at build time
-  const gridMap = {
-    1: "grid grid-cols-1",
-    2: "grid grid-cols-1 lg:grid-cols-2 gap-6",
-    3: "grid grid-cols-1 lg:grid-cols-3 gap-6",
-    4: "grid grid-cols-1 lg:grid-cols-4 gap-6"
-  };
+  // Single block row = full width
+  if (cols === 1) {
+    return `<div class="grid grid-cols-1">${renderBlock(row.blocks[0])}</div>`;
+  }
 
-  const gridCls = gridMap[cols] || "grid grid-cols-1 lg:grid-cols-2 gap-6";
+  const spans = getLayout(row);
 
   return `
-    <div class="${gridCls}">
-      ${row.blocks.map(b => `<div>${renderBlock(b)}</div>`).join("")}
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+      ${row.blocks.map((b, i) =>
+        `<div class="${spans[i]}">${renderBlock(b)}</div>`
+      ).join("")}
     </div>`;
 }
+
 
   function renderBlock(block) {
     const entry = registry[block.type];
