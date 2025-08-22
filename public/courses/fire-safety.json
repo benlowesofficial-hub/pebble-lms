@@ -116,6 +116,39 @@
     },
 
     {
+  "id": "icon-accordion",
+  "title": "Icon + Accordion Test",
+  "rows": [
+    {
+      "id": "row1",
+      "blocks": [
+        {
+          "id": "i2",
+          "type": "icon",
+          "data": {
+            "src": "/assets/icons/fire.png",
+            "alt": "Fire icon",
+            "style": "nest",
+            "size": "l"
+          }
+        },
+        {
+          "id": "acc2",
+          "type": "accordion",
+          "data": {
+            "tabs": [
+              { "id": "fuel", "title": "Fuel", "content": "Something that can burn." },
+              { "id": "heat", "title": "Heat", "content": "A source of ignition." },
+              { "id": "oxygen", "title": "Oxygen", "content": "Air to sustain the fire." }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
+
+    {
       "id": "quiz",
       "title": "Knowledge Check",
       "rows": [
