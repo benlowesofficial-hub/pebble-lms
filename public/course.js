@@ -174,27 +174,29 @@ accordion: {
       <div class="mx-auto max-w-prose">
         ${eyebrow}
         <div id="${b.id}" class="rounded-xl border-2 border-border bg-white shadow-pebble overflow-hidden">
-          ${b.data.tabs.map((tab, i) => `
+          ${b.data.tabs.map((tab) => `
             <div class="border-t first:border-t-0 border-border">
               <button
                 class="group w-full flex items-center justify-between gap-4 px-4 py-3 text-left font-semibold text-ink hover:bg-pebbleTeal-50 transition-colors"
                 data-acc-btn="${tab.id}"
-                aria-expanded="${i === 0 ? "true" : "false"}"
+                aria-expanded="false"
               >
                 <span class="truncate">${escapeHtml(tab.title)}</span>
-                <span class="relative flex items-center gap-2 text-pebbleTeal-600">
-                  <svg class="h-5 w-5 transition-transform duration-200 ${i === 0 ? "rotate-180" : ""}" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                    <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd"/>
-                  </svg>
-                  <span class="h-2 w-2 rounded-full bg-pebbleTeal-600/50 animate-[pulse_1.6s_ease-in-out_infinite]"></span>
-                </span>
+                <svg class="h-5 w-5 transition-transform duration-200" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd"/>
+                </svg>
               </button>
 
+              <!-- OUTER: no padding, we animate this height -->
               <div
-                class="acc-panel px-4 pb-4 text-inkMuted transition-all duration-300 ease-out overflow-hidden ${i === 0 ? "max-h-40" : "max-h-0"}"
+                class="acc-panel overflow-hidden transition-all duration-300 ease-out"
                 data-acc-panel="${tab.id}"
+                style="max-height:0"
               >
-                <div class="pt-1">${escapeHtml(tab.content)}</div>
+                <!-- INNER: padding lives here so 'closed' height is truly 0 -->
+                <div class="acc-inner px-4 pb-4 pt-1 text-inkMuted">
+                  ${escapeHtml(tab.content)}
+                </div>
               </div>
             </div>
           `).join("")}
@@ -207,18 +209,20 @@ accordion: {
     const root = document.getElementById(b.id);
     if (!root) return;
 
-    const btns = root.querySelectorAll("[data-acc-btn]");
-    const panels = root.querySelectorAll(".acc-panel");
+    const btns = Array.from(root.querySelectorAll("[data-acc-btn]"));
+    const panels = Array.from(root.querySelectorAll(".acc-panel"));
 
     function setOpen(id, open) {
-      const btn = root.querySelector(`[data-acc-btn="${id}"]`);
+      const btn   = root.querySelector(`[data-acc-btn="${id}"]`);
       const panel = root.querySelector(`[data-acc-panel="${id}"]`);
       if (!btn || !panel) return;
 
-      const icon = btn.querySelector("svg");
+      const icon  = btn.querySelector("svg");
+      const inner = panel.querySelector(".acc-inner");
 
       if (open) {
-        panel.style.maxHeight = panel.scrollHeight + "px";
+        // measure inner content (has padding), apply to outer (has no padding)
+        panel.style.maxHeight = inner.scrollHeight + "px";
         btn.setAttribute("aria-expanded", "true");
         icon && icon.classList.add("rotate-180");
       } else {
@@ -228,25 +232,30 @@ accordion: {
       }
     }
 
-    // Ensure only the first is open by default
-    panels.forEach((p, i) => { if (i !== 0) p.style.maxHeight = "0px"; });
+    function closeAll() {
+      btns.forEach(bn => {
+        bn.setAttribute("aria-expanded", "false");
+        const ic = bn.querySelector("svg");
+        ic && ic.classList.remove("rotate-180");
+      });
+      panels.forEach(p => p.style.maxHeight = "0px");
+    }
+
+    // Open the first item after mount (so measurements are correct)
+    const firstId = b.data?.tabs?.[0]?.id;
+    if (firstId) setTimeout(() => setOpen(firstId, true), 0);
 
     btns.forEach((btn) => {
       btn.addEventListener("click", () => {
         const id = btn.getAttribute("data-acc-btn");
         const isOpen = btn.getAttribute("aria-expanded") === "true";
-
-        // Close all
-        btns.forEach(bn => bn.setAttribute("aria-expanded", "false"));
-        root.querySelectorAll("svg").forEach(svg => svg.classList.remove("rotate-180"));
-        panels.forEach(p => p.style.maxHeight = "0px");
-
-        // Open the clicked one (unless it was already open)
-        if (!isOpen) setOpen(id, true);
+        closeAll();
+        if (!isOpen) setOpen(id, true); // toggle behaviour
       });
     });
   }
 },
+
 
     mcq: {
       render: (b) => `
