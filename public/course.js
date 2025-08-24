@@ -48,6 +48,14 @@
         `<h2 class="text-[22px] font-extrabold leading-tight">${escapeHtml(b.data.text)}</h2>`
     },
 
+    // DIVIDER: simple horizontal rule
+divider: {
+  render: (_b) => {
+    return `<hr class="border-t-2 border-pebbleTeal-200 my-8" />`;
+  }
+},
+
+
     // TEXT: paragraphs + optional eyebrow + soft [[highlight]]
     text: {
       render: (b) => {
