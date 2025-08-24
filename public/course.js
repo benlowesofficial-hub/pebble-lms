@@ -74,6 +74,30 @@
       }
     },
 
+    // LIST: unordered bullets + optional eyebrow
+    list: {
+      render: (b) => {
+        const items = Array.isArray(b.data?.items) ? b.data.items : [];
+        const eyebrow = b.data?.eyebrow
+          ? `<div class="mb-2 pl-3 border-l-2 border-pebbleTeal-200">
+               <span class="text-xs uppercase tracking-wide text-inkMuted">${escapeHtml(b.data.eyebrow)}</span>
+             </div>`
+          : "";
+
+        const lis = items
+          .map(txt => `<li class="pl-1"><span class="text-lg leading-relaxed text-ink">${escapeHtml(String(txt))}</span></li>`)
+          .join("");
+
+        return `<div class="space-y-3">
+                  ${eyebrow}
+                  <ul class="list-disc pl-6">
+                    ${lis}
+                  </ul>
+                </div>`;
+      }
+    },
+
+    
     icon: {
       render: (b) => {
         const size = b.data.size || "m"; // s | m | l
