@@ -43,7 +43,27 @@
               "id": "t-with-icon",
               "type": "text",
               "data": {
-                "text": "This is a test of a text block with an icon next to it. Hopefully everything looks great!"
+                "text": "This is a test of a text block with an icon next to it. [[Hopefully everything looks great!]]"
+              }
+            }
+          ]
+        },
+        {
+          "id": "r3",
+          "width": "prose",
+          "align": "center",
+          "gap": "md",
+          "blocks": [
+            {
+              "id": "list-demo",
+              "type": "list",
+              "data": {
+                "eyebrow": "Key points",
+                "items": [
+                  "List point one",
+                  "List point two",
+                  "List point three"
+                ]
               }
             }
           ]
