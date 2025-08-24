@@ -25,7 +25,7 @@
         },
         {
           "id": "r-divider-before",
-          "width": "prose",
+          "width": "container",
           "blocks": [
             {
               "id": "div-before",
@@ -61,7 +61,7 @@
         },
         {
           "id": "r-divider-after",
-          "width": "prose",
+          "width": "container",
           "blocks": [
             {
               "id": "div-after",
