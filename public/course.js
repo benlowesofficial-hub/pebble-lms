@@ -162,6 +162,7 @@ const lis = items
     },
 
 // accordion block type
+// accordion block type
 accordion: {
   render: (b) => {
     const eyebrow = b.data.eyebrow
@@ -170,40 +171,44 @@ accordion: {
          </div>`
       : "";
 
+    // NOTE: no width classes here; row controls width (prose vs container)
     return `
-      <div class="mx-auto max-w-prose">
-        ${eyebrow}
-        <div id="${b.id}" class="rounded-xl border-2 border-border bg-white shadow-pebble overflow-hidden">
-          ${b.data.tabs.map((tab) => `
-            <div class="border-t first:border-t-0 border-border">
-              <button
-                class="group w-full flex items-center justify-between gap-4 px-4 py-3 text-left font-semibold text-ink hover:bg-pebbleTeal-50 transition-colors"
-                data-acc-btn="${tab.id}"
-                aria-expanded="false"
-              >
-                <span class="truncate">${escapeHtml(tab.title)}</span>
-                <svg class="h-5 w-5 transition-transform duration-200" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                  <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd"/>
-                </svg>
-              </button>
+      ${eyebrow}
+      <div id="${b.id}" class="rounded-xl border-2 border-border bg-white shadow-pebble overflow-hidden">
+        ${b.data.tabs.map((tab) => `
+          <div class="border-t first:border-t-0 border-border">
+            <button
+              class="group w-full flex items-center justify-between gap-4 px-4 py-3 text-left font-semibold text-ink hover:bg-pebbleTeal-50 transition-colors"
+              data-acc-btn="${tab.id}"
+              aria-expanded="false"
+            >
+              <span class="truncate">${escapeHtml(tab.title)}</span>
+              <svg class="h-5 w-5 transition-transform duration-200" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd"/>
+              </svg>
+            </button>
 
-              <!-- OUTER: no padding, we animate this height -->
-              <div
-                class="acc-panel overflow-hidden transition-all duration-300 ease-out"
-                data-acc-panel="${tab.id}"
-                style="max-height:0"
-              >
-                <!-- INNER: padding lives here so 'closed' height is truly 0 -->
-                <div class="acc-inner px-4 pb-4 pt-1 text-inkMuted">
-                  ${escapeHtml(tab.content)}
-                </div>
+            <!-- OUTER: no padding, we animate this height -->
+            <div
+              class="acc-panel overflow-hidden transition-all duration-300 ease-out"
+              data-acc-panel="${tab.id}"
+              style="max-height:0"
+            >
+              <!-- INNER: padding lives here so 'closed' height is truly 0 -->
+              <div class="acc-inner px-4 pb-4 pt-1 text-inkMuted">
+                ${escapeHtml(tab.content)}
               </div>
             </div>
-          `).join("")}
-        </div>
+          </div>
+        `).join("")}
       </div>
     `;
   },
+
+  // hydrate stays the same as you have it now...
+  hydrate: (b) => { /* ...unchanged... */ }
+},
+
 
   hydrate: (b) => {
     const root = document.getElementById(b.id);
