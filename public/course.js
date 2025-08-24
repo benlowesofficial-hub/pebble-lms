@@ -201,43 +201,51 @@
     }
   };
 
-  // ---------- Row + Section renderers ----------
-  // NEW: generic grid layout — no type-specific rules.
-  function renderRow(row) {
-    const mode = row.layout?.mode === "container" ? "container" : "prose"; // default: prose
-    const blocks = row.blocks || [];
-    const cols = Math.max(1, blocks.length);
+ function renderRow(row) {
+  // Back-compat: support either row.width ("prose" | "container") or row.layout.mode
+  const mode = (row.layout && row.layout.mode) || row.width || "prose";
+  const blocks = row.blocks || [];
+  const cols = Math.max(1, blocks.length);
 
-    // width wrapper: prose rows center on a readable text column
-    const widthWrapOpen =
-      mode === "prose"
-        ? `<div class="mx-auto max-w-prose">`
-        : `<div class="mx-auto">`;
-    const widthWrapClose = `</div>`;
+  // Width wrapper
+  const widthWrapOpen = mode === "container"
+    ? `<div class="mx-auto">`
+    : `<div class="mx-auto max-w-prose">`;
+  const widthWrapClose = `</div>`;
 
-    // compute weights -> col spans (12-column grid on lg)
-    const weights = blocks.map(b => {
-      const w = Number(b.weight ?? 1);
-      return Number.isFinite(w) && w > 0 ? w : 1;
-    });
-    const total = weights.reduce((a, b) => a + b, 0) || 1;
-    const spans = weights.map(w => Math.max(1, Math.round((w / total) * 12)));
-
-    // On mobile: stack (1 column). On lg: grid with computed spans.
-    const gridOpen = cols === 1
-      ? `<div class="grid grid-cols-1 gap-6">`
-      : `<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">`;
-    const gridClose = `</div>`;
-
-    const content = blocks.map((b, i) => {
-      const spanCls = cols === 1 ? "" : `lg:col-span-${spans[i]}`;
-      // Center icons by default
-      const alignCls = b.type === "icon" ? "flex justify-center" : "";
-      return `<div class="${spanCls} ${alignCls}">${renderBlock(b)}</div>`;
-    }).join("");
-
-    return widthWrapOpen + gridOpen + content + gridClose + widthWrapClose;
+  // Special case (generic, not type-specific): prose + 2 blocks → auto | 1fr
+  if (mode !== "container" && cols === 2) {
+    return (
+      widthWrapOpen +
+      `<div class="grid grid-cols-1 lg:grid-cols-[auto,1fr] items-start gap-6 lg:gap-8">
+         <div class="flex justify-center lg:justify-start">${renderBlock(blocks[0])}</div>
+         <div class="min-w-0">${renderBlock(blocks[1])}</div>
+       </div>` +
+      widthWrapClose
+    );
   }
+
+  // Generic path: stack on mobile; 12-col grid on lg
+  const weights = blocks.map(b => {
+    const w = Number(b.weight ?? 1);
+    return Number.isFinite(w) && w > 0 ? w : 1;
+  });
+  const total = weights.reduce((a, b) => a + b, 0) || 1;
+  const spans = weights.map(w => Math.max(1, Math.round((w / total) * 12)));
+
+  const gridOpen = cols === 1
+    ? `<div class="grid grid-cols-1 gap-6">`
+    : `<div class="grid grid-cols-1 lg:grid-cols-12 items-start gap-6 lg:gap-8">`;
+  const gridClose = `</div>`;
+
+  const content = blocks.map((b, i) => {
+    const spanCls = cols === 1 ? "" : `lg:col-span-${spans[i]}`;
+    const alignCls = b.type === "icon" ? "flex justify-center lg:justify-start" : "";
+    return `<div class="${spanCls} ${alignCls}">${renderBlock(b)}</div>`;
+  }).join("");
+
+  return widthWrapOpen + gridOpen + content + gridClose + widthWrapClose;
+}
 
   function renderBlock(block) {
     const entry = registry[block.type];
