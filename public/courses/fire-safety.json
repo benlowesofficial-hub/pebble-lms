@@ -1,17 +1,20 @@
 {
   "id": "fire-safety",
   "title": "Fire Safety (Demo)",
-  "est_minutes": 5,
+  "est_minutes": 3,
   "sections": [
     {
-      "id": "intro",
+      "id": "welcome",
       "title": "Welcome",
       "rows": [
         {
-          "id": "row1",
+          "id": "r1",
+          "width": "prose",
+          "align": "center",
+          "gap": "md",
           "blocks": [
             {
-              "id": "t1",
+              "id": "t-intro",
               "type": "text",
               "data": {
                 "eyebrow": "Introduction",
@@ -21,10 +24,13 @@
           ]
         },
         {
-          "id": "row2",
+          "id": "r2",
+          "width": "prose",
+          "align": "center",
+          "gap": "lg",
           "blocks": [
             {
-              "id": "i1",
+              "id": "i-fire",
               "type": "icon",
               "data": {
                 "src": "/assets/icons/fire.png",
@@ -34,7 +40,7 @@
               }
             },
             {
-              "id": "t2",
+              "id": "t-with-icon",
               "type": "text",
               "data": {
                 "text": "This is a test of a text block with an icon next to it. Hopefully everything looks great!"
