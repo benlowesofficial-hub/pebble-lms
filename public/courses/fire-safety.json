@@ -27,7 +27,7 @@
               "id": "i1",
               "type": "icon",
               "data": {
-                "src": "/assets/fire.png",
+                "src": "public/assets/fire.png",
                 "alt": "Fire icon",
                 "style": "nest",
                 "size": "l"
