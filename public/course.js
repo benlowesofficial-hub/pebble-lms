@@ -200,6 +200,55 @@ accordion: {
             class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-out"
           >
             <div class="px-4 pb-4 text-inkMuted">
+              ${content}
+            </div>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    return `
+      <div class="mx-auto ${b.data.width === 'container' ? '' : 'max-w-prose'}">
+        ${eyebrow}
+        <div id="${b.id}" class="rounded-xl border-2 border-pebbleTeal-200 bg-white shadow-pebble transition-shadow">
+          ${items}
+        </div>
+      </div>
+    `;
+  },
+
+  hydrate: (b) => {
+    const root = document.getElementById(b.id);
+    if (!root) return;
+    const rows = Array.from(root.querySelectorAll('button[aria-controls]'));
+
+    function closeAll() {
+      rows.forEach(btn => {
+        const panel = document.getElementById(btn.getAttribute('aria-controls'));
+        btn.setAttribute('aria-expanded', 'false');
+        btn.querySelector('span[aria-hidden="true"]').style.transform = 'rotate(0deg)';
+        if (panel) panel.style.maxHeight = '0px';
+      });
+    }
+
+    function open(btn) {
+      const panel = document.getElementById(btn.getAttribute('aria-controls'));
+      if (!panel) return;
+      btn.setAttribute('aria-expanded', 'true');
+      btn.querySelector('span[aria-hidden="true"]').style.transform = 'rotate(180deg)';
+      panel.style.maxHeight = panel.scrollHeight + 'px';
+    }
+
+    rows.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        closeAll();
+        if (!expanded) open(btn);
+      });
+    });
+  }
+},
+
 
 
     mcq: {
