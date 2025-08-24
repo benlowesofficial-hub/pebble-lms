@@ -84,13 +84,14 @@ list: {
          </div>`
       : "";
 
-    const lis = items
-      .map(txt =>
-        `<li class="text-lg md:text-xl font-medium leading-relaxed text-ink">
-           ${escapeHtml(String(txt))}
-         </li>`
-      )
-      .join("");
+const lis = items
+  .map(txt =>
+    `<li class="text-lg font-bold leading-relaxed text-ink">
+       ${escapeHtml(String(txt))}
+     </li>`
+  )
+  .join("");
+
 
     return `<div class="space-y-3">
               ${eyebrow}
