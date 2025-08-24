@@ -240,15 +240,17 @@ text: {
 
     const types = row.blocks.map(b => b.type);
 
-// Icon + Text → centered group with prose-aligned text
+// Icon + Text → align to prose column (icon hangs in reserved left gutter)
 if (types.includes("icon") && types.includes("text")) {
   return `
-    <div class="flex justify-center">
-      <div class="flex flex-col lg:flex-row gap-6 lg:items-start">
-        <div class="flex-shrink-0 flex justify-center lg:justify-start">
+    <div class="mx-auto max-w-prose">
+      <div class="lg:relative lg:pl-24">
+        <!-- Icon -->
+        <div class="mb-3 flex justify-center lg:mb-0 lg:absolute lg:left-0 lg:top-1 lg:block">
           ${renderBlock(row.blocks[0])}
         </div>
-        <div class="max-w-prose">
+        <!-- Text -->
+        <div>
           ${renderBlock(row.blocks[1])}
         </div>
       </div>
