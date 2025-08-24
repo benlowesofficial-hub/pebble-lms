@@ -47,10 +47,10 @@
       render: (b) =>
         `<h2 class="text-[22px] font-extrabold leading-tight">${escapeHtml(b.data.text)}</h2>`
     },
-    text: {
-      render: (b) =>
-        `<p class="text-lg text-inkMuted">${escapeHtml(b.data.text)}</p>`
-    },
+   text: {
+  render: (b) =>
+    `<p class="text-lg text-ink leading-relaxed">${escapeHtml(b.data.text)}</p>`
+},
     icon: {
       render: (b) => {
         const size = b.data.size || "m"; // s | m | l
