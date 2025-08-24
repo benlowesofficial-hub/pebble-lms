@@ -80,7 +80,7 @@
               "id": "list-demo",
               "type": "list",
               "data": {
-                "eyebrow": "Key points",
+                "eyebrow": "List Block",
                 "items": [
                   "List point one",
                   "List point two",
