@@ -32,6 +32,13 @@
                 "style": "nest",
                 "size": "l"
               }
+            },
+            {
+              "id": "t2",
+              "type": "text",
+              "data": {
+                "text": "This is a test of a text block with an icon next to it. Hopefully everything looks great!"
+              }
             }
           ]
         }
