@@ -285,11 +285,12 @@ text: {
     const wrap = document.createElement("div");
     wrap.className = "space-y-8 animate-fade-in";
 
-    const maybeTitle = section.title
-      ? `<div class="mb-4">
-           <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight">${escapeHtml(section.title)}</h1>
-         </div>`
-      : "";
+const maybeTitle = section.title
+  ? `<div class="mb-6 bg-pebbleTeal-50 border border-pebbleTeal-100 rounded-lg px-4 py-3">
+       <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-ink">${escapeHtml(section.title)}</h1>
+     </div>`
+  : "";
+
 
     wrap.innerHTML = maybeTitle +
       section.rows.map(renderRow).join("");
