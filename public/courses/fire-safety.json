@@ -25,7 +25,7 @@
         },
         {
           "id": "r-divider-before",
-          "width": "container",
+          "width": "prose",
           "blocks": [
             {
               "id": "div-before",
@@ -61,7 +61,7 @@
         },
         {
           "id": "r-divider-after",
-          "width": "container",
+          "width": "prose",
           "blocks": [
             {
               "id": "div-after",
@@ -85,6 +85,37 @@
                   "List point one",
                   "List point two",
                   "List point three"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "r4",
+          "width": "prose",
+          "align": "center",
+          "gap": "md",
+          "blocks": [
+            {
+              "id": "acc1",
+              "type": "accordion",
+              "data": {
+                "tabs": [
+                  {
+                    "id": "topic1",
+                    "title": "Topic One",
+                    "content": "This is where you would see text about the first topic"
+                  },
+                  {
+                    "id": "topic2",
+                    "title": "Topic Two",
+                    "content": "This is where you would see text about the second topic"
+                  },
+                  {
+                    "id": "topic3",
+                    "title": "Topic Three",
+                    "content": "This is where you would see text about the third topic"
+                  }
                 ]
               }
             }
