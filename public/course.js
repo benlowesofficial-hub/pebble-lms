@@ -241,9 +241,10 @@ accordion: {
       panels.forEach(p => p.style.maxHeight = "0px");
     }
 
-    // Open the first item after mount (so measurements are correct)
-    const firstId = b.data?.tabs?.[0]?.id;
-    if (firstId) setTimeout(() => setOpen(firstId, true), 0);
+// Ensure all start closed
+btns.forEach(bn => bn.setAttribute("aria-expanded", "false"));
+panels.forEach(p => (p.style.maxHeight = "0px"));
+
 
     btns.forEach((btn) => {
       btn.addEventListener("click", () => {
