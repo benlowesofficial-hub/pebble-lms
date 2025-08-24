@@ -51,7 +51,7 @@
     // DIVIDER: simple horizontal rule
 divider: {
   render: (_b) => {
-    return `<hr class="border-t-2 border-pebbleTeal-200 my-8" />`;
+    return `<hr class="border-t-2 border-pebbleTeal-200 mt-8 mb-4" />`;
   }
 },
 
