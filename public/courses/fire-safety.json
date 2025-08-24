@@ -14,6 +14,7 @@
               "id": "t1",
               "type": "text",
               "data": {
+                "eyebrow": "Introduction",
                 "text": "This is a demo course used to test different block types, we will be adding in new block types as we progress with the test. This is a test of the text block block type.\n\nThis is testing how a new paragraph will appear within the same text block. And this is testing how a very long paragraph might appear. Today is a Sunday, it is the 24th of August 2025. This is a very early version of Pebble, there is a huge amount of work left to do, but for now it is just a fun side project."
               }
             }
