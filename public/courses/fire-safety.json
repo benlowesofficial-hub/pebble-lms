@@ -92,7 +92,7 @@
         },
         {
           "id": "r4",
-          "width": "prose",
+          "width": "container",
           "align": "center",
           "gap": "md",
           "blocks": [
