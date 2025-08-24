@@ -205,10 +205,6 @@ accordion: {
     `;
   },
 
-  // hydrate stays the same as you have it now...
-  hydrate: (b) => { /* ...unchanged... */ }
-},
-
 
   hydrate: (b) => {
     const root = document.getElementById(b.id);
