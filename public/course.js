@@ -161,7 +161,7 @@ const lis = items
       }
     },
 
-    // accordion block type
+// accordion block type
 accordion: {
   render: (b) => {
     const eyebrow = b.data.eyebrow
@@ -170,7 +170,6 @@ accordion: {
          </div>`
       : "";
 
-    // Outer card – rounded, thicker border, clipped overflow so tints never bleed
     return `
       <div class="mx-auto max-w-prose">
         ${eyebrow}
@@ -211,7 +210,6 @@ accordion: {
     const btns = root.querySelectorAll("[data-acc-btn]");
     const panels = root.querySelectorAll(".acc-panel");
 
-    // Utility to open/close with smooth height
     function setOpen(id, open) {
       const btn = root.querySelector(`[data-acc-btn="${id}"]`);
       const panel = root.querySelector(`[data-acc-panel="${id}"]`);
@@ -220,18 +218,17 @@ accordion: {
       const icon = btn.querySelector("svg");
 
       if (open) {
-        // measure content height then set max-height for animation
         panel.style.maxHeight = panel.scrollHeight + "px";
         btn.setAttribute("aria-expanded", "true");
-        icon?.classList.add("rotate-180");
+        icon && icon.classList.add("rotate-180");
       } else {
         panel.style.maxHeight = "0px";
         btn.setAttribute("aria-expanded", "false");
-        icon?.classList.remove("rotate-180");
+        icon && icon.classList.remove("rotate-180");
       }
     }
 
-    // Close all except first (which is open by default from render)
+    // Ensure only the first is open by default
     panels.forEach((p, i) => { if (i !== 0) p.style.maxHeight = "0px"; });
 
     btns.forEach((btn) => {
@@ -244,47 +241,12 @@ accordion: {
         root.querySelectorAll("svg").forEach(svg => svg.classList.remove("rotate-180"));
         panels.forEach(p => p.style.maxHeight = "0px");
 
-        // Open the clicked one (unless it was open – then it toggles closed)
+        // Open the clicked one (unless it was already open)
         if (!isOpen) setOpen(id, true);
       });
     });
   }
 },
-
-
-  hydrate: (b) => {
-    const root = document.getElementById(b.id);
-    if (!root) return;
-    const rows = Array.from(root.querySelectorAll('button[aria-controls]'));
-
-    function closeAll() {
-      rows.forEach(btn => {
-        const panel = document.getElementById(btn.getAttribute('aria-controls'));
-        btn.setAttribute('aria-expanded', 'false');
-        btn.querySelector('span[aria-hidden="true"]').style.transform = 'rotate(0deg)';
-        if (panel) panel.style.maxHeight = '0px';
-      });
-    }
-
-    function open(btn) {
-      const panel = document.getElementById(btn.getAttribute('aria-controls'));
-      if (!panel) return;
-      btn.setAttribute('aria-expanded', 'true');
-      btn.querySelector('span[aria-hidden="true"]').style.transform = 'rotate(180deg)';
-      panel.style.maxHeight = panel.scrollHeight + 'px';
-    }
-
-    rows.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const expanded = btn.getAttribute('aria-expanded') === 'true';
-        closeAll();
-        if (!expanded) open(btn);
-      });
-    });
-  }
-},
-
-
 
     mcq: {
       render: (b) => `
