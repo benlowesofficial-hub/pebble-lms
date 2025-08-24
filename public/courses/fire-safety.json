@@ -43,7 +43,6 @@
               "id": "t-with-icon",
               "type": "text",
               "data": {
-                "eyebrow": "Fire Icon",
                 "text": "This is a test of a text block with an icon next to it. [[Hopefully everything looks great!]]"
               }
             }
