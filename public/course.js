@@ -49,42 +49,37 @@
     },
 
     // TEXT BLOCK with: paragraphs, lead para, optional eyebrow, soft highlights
-    text: {
-      render: (b) => {
-        const raw = String(b.data.text || "");
+text: {
+  render: (b) => {
+    const raw = String(b.data.text || "");
 
-        // 1) Escape HTML to keep things safe
-        let safe = escapeHtml(raw);
+    // Escape HTML
+    let safe = escapeHtml(raw);
 
-        // 2) Soft highlights: [[phrase]] -> span with subtle wash
-        //    Works on the escaped string (brackets remain literal)
-        safe = safe.replace(/\[\[(.+?)\]\]/g, (_m, inner) => {
-          return `<span class="rounded px-1.5 py-0.5 bg-pebbleTeal-50">${inner}</span>`;
-        });
+    // Soft highlights: [[phrase]]
+    safe = safe.replace(/\[\[(.+?)\]\]/g, (_m, inner) => {
+      return `<span class="rounded px-1.5 py-0.5 bg-pebbleTeal-50">${inner}</span>`;
+    });
 
-        // 3) Split on double newlines to create paragraphs
-        const parts = safe.split(/\n\s*\n/).filter(Boolean);
+    // Split into paragraphs
+    const parts = safe.split(/\n\s*\n/).filter(Boolean);
 
-        // 4) Build eyebrow (optional)
-        const eyebrow = b.data.eyebrow
-          ? `<div class="mb-2 pl-3 border-l-2 border-pebbleTeal-200">
-               <span class="text-xs uppercase tracking-wide text-inkMuted">${escapeHtml(b.data.eyebrow)}</span>
-             </div>`
-          : "";
+    // Eyebrow (optional)
+    const eyebrow = b.data.eyebrow
+      ? `<div class="mb-2 pl-3 border-l-2 border-pebbleTeal-200">
+           <span class="text-xs uppercase tracking-wide text-inkMuted">${escapeHtml(b.data.eyebrow)}</span>
+         </div>`
+      : "";
 
-        // 5) Render paragraphs; first one is a "lead"
-        const paras = parts.map((p, i) => {
-          const base = "leading-relaxed text-ink";
-          if (i === 0) {
-            return `<p class="${cx(base, "text-xl font-semibold")}">${p}</p>`;
-          }
-          return `<p class="${cx(base, "text-lg")}">${p}</p>`;
-        }).join("");
+    // Render all paragraphs consistently
+    const paras = parts
+      .map(p => `<p class="text-lg leading-relaxed text-ink">${p}</p>`)
+      .join("");
 
-        // 6) Comfortable rhythm wrapper
-        return `<div class="max-w-prose space-y-5">${eyebrow}${paras}</div>`;
-      }
-    },
+    return `<div class="max-w-prose mx-auto space-y-5">${eyebrow}${paras}</div>`;
+  }
+},
+
 
     icon: {
       render: (b) => {
