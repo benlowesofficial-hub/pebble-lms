@@ -240,15 +240,20 @@ text: {
 
     const types = row.blocks.map(b => b.type);
 
-// Icon + Text → flex row
+// Icon + Text → centered group with prose-aligned text
 if (types.includes("icon") && types.includes("text")) {
   return `
-    <div class="flex flex-col lg:flex-row gap-6 lg:items-start">
-      <div class="flex-shrink-0 flex justify-center lg:justify-start">${renderBlock(row.blocks[0])}</div>
-      <div class="flex-1 max-w-prose">${renderBlock(row.blocks[1])}</div>
+    <div class="flex justify-center">
+      <div class="flex flex-col lg:flex-row gap-6 lg:items-start">
+        <div class="flex-shrink-0 flex justify-center lg:justify-start">
+          ${renderBlock(row.blocks[0])}
+        </div>
+        <div class="max-w-prose">
+          ${renderBlock(row.blocks[1])}
+        </div>
+      </div>
     </div>`;
 }
-
     // Image or MultiImage + Text → flex row
     if ((types.includes("image") || types.includes("multiImage")) && types.includes("text")) {
       return `
