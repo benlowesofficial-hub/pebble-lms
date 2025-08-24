@@ -161,41 +161,101 @@ const lis = items
       }
     },
 
-    accordion: {
-      render: (b) => `
-        <div id="${b.id}" class="border rounded divide-y">
-          ${b.data.tabs.map((tab) => `
-            <button class="w-full text-left p-3 font-semibold focus:outline-none"
-                    data-tab="${tab.id}">
-              ${escapeHtml(tab.title)}
-            </button>
-            <div class="p-3 text-inkMuted hidden">${escapeHtml(tab.content)}</div>
-          `).join("")}
-        </div>`,
-      hydrate: (b) => {
-        const container = document.getElementById(b.id);
-        const buttons = container.querySelectorAll("button[data-tab]");
-        buttons.forEach(btn => {
-          btn.addEventListener("click", () => {
-            const tabId = btn.dataset.tab;
-            const allPanels = container.querySelectorAll("div");
-            allPanels.forEach(p => p.classList.add("hidden"));
-            btn.nextElementSibling.classList.remove("hidden");
-            bus.emit(`accordion:open:${b.id}`, { tabId });
-            bus.emit("tab:open", { source: b.id, tabId });
-          });
-        });
+   // ----- PREMIUM ACCORDION (with optional eyebrow) -----
+accordion: {
+  render: (b) => {
+    const eyebrow = b.data.eyebrow
+      ? `<div class="mb-2 pl-3 border-l-2 border-pebbleTeal-200">
+           <span class="text-xs uppercase tracking-wide text-inkMuted">${escapeHtml(b.data.eyebrow)}</span>
+         </div>`
+      : "";
 
-        (b.interactions || []).forEach(inter => {
-          bus.on(inter.on, payload => {
-            const target = inter.target;
-            const action = inter.action;
-            const param = inter.param.replace("{{tab.id}}", payload.tabId);
-            bus.emit(`${action}:${target}`, param);
-          });
-        });
-      }
-    },
+    const items = (b.data.tabs || []).map((tab, i) => {
+      const btnId = `${b.id}-btn-${i}`;
+      const panelId = `${b.id}-panel-${i}`;
+      const title = escapeHtml(tab.title);
+      const content = escapeHtml(tab.content || "");
+
+      return `
+        <div class="border-t first:border-t-0 border-border">
+          <button
+            id="${btnId}"
+            class="w-full flex items-center justify-between gap-4 px-4 py-3 md:py-4 text-left font-semibold text-ink hover:bg-pebbleTeal-50 focus:outline-none"
+            aria-expanded="false"
+            aria-controls="${panelId}"
+            data-idx="${i}"
+          >
+            <span class="min-w-0 truncate">${title}</span>
+            <span class="shrink-0 transition-transform duration-300 ease-out will-change-transform" aria-hidden="true">
+              <!-- chevron -->
+              <svg class="h-5 w-5 text-inkMuted" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.085l3.71-3.855a.75.75 0 111.08 1.04l-4.24 4.41a.75.75 0 01-1.08 0L5.21 8.27a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+              </svg>
+            </span>
+          </button>
+          <div
+            id="${panelId}"
+            role="region"
+            aria-labelledby="${btnId}"
+            class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-out"
+          >
+            <div class="px-4 pb-4 text-inkMuted">
+              ${content}
+            </div>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    return `
+      <div class="mx-auto ${b.data.width === 'container' ? '' : 'max-w-prose'}">
+        ${eyebrow}
+        <div id="${b.id}" class="rounded-xl border-2 border-pebbleTeal-200 bg-white shadow-pebble transition-shadow">
+          ${items}
+        </div>
+      </div>
+    `;
+  },
+
+  hydrate: (b) => {
+    const root = document.getElementById(b.id);
+    if (!root) return;
+    const rows = Array.from(root.querySelectorAll('button[aria-controls]'));
+
+    function closeAll() {
+      rows.forEach(btn => {
+        const panel = document.getElementById(btn.getAttribute('aria-controls'));
+        btn.setAttribute('aria-expanded', 'false');
+        btn.querySelector('span[aria-hidden="true"]').style.transform = 'rotate(0deg)';
+        if (panel) panel.style.maxHeight = '0px';
+      });
+    }
+
+    function open(btn) {
+      const panel = document.getElementById(btn.getAttribute('aria-controls'));
+      if (!panel) return;
+      btn.setAttribute('aria-expanded', 'true');
+      btn.querySelector('span[aria-hidden="true"]').style.transform = 'rotate(180deg)';
+      // measure natural height, then animate
+      panel.style.maxHeight = panel.scrollHeight + 'px';
+    }
+
+    rows.forEach(btn => {
+      // mouse/keyboard toggle
+      btn.addEventListener('click', () => {
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        // one open at a time:
+        closeAll();
+        if (!expanded) open(btn);
+      });
+      // keyboard enter/space already handled by click since it's a <button>
+    });
+
+    // optional: open first by default (comment out to start all closed)
+    // if (rows[0]) open(rows[0]);
+  }
+},
+
 
     mcq: {
       render: (b) => `
