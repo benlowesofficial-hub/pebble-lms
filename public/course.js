@@ -161,7 +161,7 @@ const lis = items
       }
     },
 
-   // ----- PREMIUM ACCORDION (with optional eyebrow) -----
+// ----- PREMIUM ACCORDION (with optional eyebrow + hover hint) -----
 accordion: {
   render: (b) => {
     const eyebrow = b.data.eyebrow
@@ -186,7 +186,7 @@ accordion: {
             data-idx="${i}"
           >
             <span class="min-w-0 truncate">${title}</span>
-            <span class="shrink-0 transition-transform duration-300 ease-out will-change-transform" aria-hidden="true">
+            <span class="hint-hover shrink-0 transition-transform duration-300 ease-out will-change-transform" aria-hidden="true">
               <!-- chevron -->
               <svg class="h-5 w-5 text-inkMuted" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.085l3.71-3.855a.75.75 0 111.08 1.04l-4.24 4.41a.75.75 0 01-1.08 0L5.21 8.27a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
@@ -200,61 +200,6 @@ accordion: {
             class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-out"
           >
             <div class="px-4 pb-4 text-inkMuted">
-              ${content}
-            </div>
-          </div>
-        </div>
-      `;
-    }).join("");
-
-    return `
-      <div class="mx-auto ${b.data.width === 'container' ? '' : 'max-w-prose'}">
-        ${eyebrow}
-        <div id="${b.id}" class="rounded-xl border-2 border-pebbleTeal-200 bg-white shadow-pebble transition-shadow">
-          ${items}
-        </div>
-      </div>
-    `;
-  },
-
-  hydrate: (b) => {
-    const root = document.getElementById(b.id);
-    if (!root) return;
-    const rows = Array.from(root.querySelectorAll('button[aria-controls]'));
-
-    function closeAll() {
-      rows.forEach(btn => {
-        const panel = document.getElementById(btn.getAttribute('aria-controls'));
-        btn.setAttribute('aria-expanded', 'false');
-        btn.querySelector('span[aria-hidden="true"]').style.transform = 'rotate(0deg)';
-        if (panel) panel.style.maxHeight = '0px';
-      });
-    }
-
-    function open(btn) {
-      const panel = document.getElementById(btn.getAttribute('aria-controls'));
-      if (!panel) return;
-      btn.setAttribute('aria-expanded', 'true');
-      btn.querySelector('span[aria-hidden="true"]').style.transform = 'rotate(180deg)';
-      // measure natural height, then animate
-      panel.style.maxHeight = panel.scrollHeight + 'px';
-    }
-
-    rows.forEach(btn => {
-      // mouse/keyboard toggle
-      btn.addEventListener('click', () => {
-        const expanded = btn.getAttribute('aria-expanded') === 'true';
-        // one open at a time:
-        closeAll();
-        if (!expanded) open(btn);
-      });
-      // keyboard enter/space already handled by click since it's a <button>
-    });
-
-    // optional: open first by default (comment out to start all closed)
-    // if (rows[0]) open(rows[0]);
-  }
-},
 
 
     mcq: {
