@@ -48,38 +48,31 @@
         `<h2 class="text-[22px] font-extrabold leading-tight">${escapeHtml(b.data.text)}</h2>`
     },
 
-    // TEXT BLOCK with: paragraphs, lead para, optional eyebrow, soft highlights
-text: {
-  render: (b) => {
-    const raw = String(b.data.text || "");
+    // TEXT: paragraphs + optional eyebrow + soft [[highlight]]
+    text: {
+      render: (b) => {
+        const raw = String(b.data.text || "");
+        let safe = escapeHtml(raw);
+        safe = safe.replace(/\[\[(.+?)\]\]/g, (_m, inner) =>
+          `<span class="rounded px-1.5 py-0.5 bg-pebbleTeal-50">${inner}</span>`
+        );
+        const parts = safe.split(/\n\s*\n/).filter(Boolean);
 
-    // Escape HTML
-    let safe = escapeHtml(raw);
+        const eyebrow = b.data.eyebrow
+          ? `<div class="mb-2 pl-3 border-l-2 border-pebbleTeal-200">
+               <span class="text-xs uppercase tracking-wide text-inkMuted">${escapeHtml(b.data.eyebrow)}</span>
+             </div>`
+          : "";
 
-    // Soft highlights: [[phrase]]
-    safe = safe.replace(/\[\[(.+?)\]\]/g, (_m, inner) => {
-      return `<span class="rounded px-1.5 py-0.5 bg-pebbleTeal-50">${inner}</span>`;
-    });
+        const paras = parts.map(p =>
+          `<p class="text-lg leading-relaxed text-ink">${p}</p>`
+        ).join("");
 
-    // Split into paragraphs
-    const parts = safe.split(/\n\s*\n/).filter(Boolean);
-
-    // Eyebrow (optional)
-    const eyebrow = b.data.eyebrow
-      ? `<div class="mb-2 pl-3 border-l-2 border-pebbleTeal-200">
-           <span class="text-xs uppercase tracking-wide text-inkMuted">${escapeHtml(b.data.eyebrow)}</span>
-         </div>`
-      : "";
-
-    // Render all paragraphs consistently
-    const paras = parts
-      .map(p => `<p class="text-lg leading-relaxed text-ink">${p}</p>`)
-      .join("");
-
-    return `<div class="max-w-prose mx-auto space-y-5">${eyebrow}${paras}</div>`;
-  }
-},
-
+        // IMPORTANT: text block itself does NOT impose max-width.
+        // Width is controlled by the ROW wrapper (prose vs container).
+        return `<div class="space-y-5">${eyebrow}${paras}</div>`;
+      }
+    },
 
     icon: {
       render: (b) => {
@@ -87,7 +80,6 @@ text: {
         const style = b.data.style || "plain"; // plain | nest
         const src = b.data.src;
         const label = escapeAttr(b.data.alt || "");
-
         const sizeCls = size === "s" ? "h-12 w-12"
           : size === "l" ? "h-24 w-24"
           : "h-16 w-16";
@@ -101,10 +93,12 @@ text: {
         return `<img src="${src}" alt="${label}" class="${sizeCls} object-contain" />`;
       }
     },
+
     image: {
       render: (b) =>
         `<img src="${b.data.src}" alt="${escapeAttr(b.data.alt || "")}" class="mx-auto rounded shadow" />`
     },
+
     multiImage: {
       render: (b) => {
         const state = b.data.defaultState || "default";
@@ -128,10 +122,11 @@ text: {
         });
       }
     },
+
     accordion: {
       render: (b) => `
         <div id="${b.id}" class="border rounded divide-y">
-          ${b.data.tabs.map((tab, i) => `
+          ${b.data.tabs.map((tab) => `
             <button class="w-full text-left p-3 font-semibold focus:outline-none"
                     data-tab="${tab.id}">
               ${escapeHtml(tab.title)}
@@ -145,18 +140,14 @@ text: {
         buttons.forEach(btn => {
           btn.addEventListener("click", () => {
             const tabId = btn.dataset.tab;
-            // toggle content
             const allPanels = container.querySelectorAll("div");
             allPanels.forEach(p => p.classList.add("hidden"));
             btn.nextElementSibling.classList.remove("hidden");
-            // emit event
             bus.emit(`accordion:open:${b.id}`, { tabId });
-            // also emit general tab:open for linking
             bus.emit("tab:open", { source: b.id, tabId });
           });
         });
 
-        // set up interactions
         (b.interactions || []).forEach(inter => {
           bus.on(inter.on, payload => {
             const target = inter.target;
@@ -167,6 +158,7 @@ text: {
         });
       }
     },
+
     mcq: {
       render: (b) => `
         <div id="${b.id}" class="space-y-3">
@@ -210,67 +202,41 @@ text: {
   };
 
   // ---------- Row + Section renderers ----------
-  function getLayout(row) {
-    const types = row.blocks.map(b => b.type);
-
-    // Icon + Text combo
-    if (types.includes("icon") && types.includes("text")) {
-      // Icon smaller, text wider
-      return ["lg:col-span-4 flex justify-center", "lg:col-span-8"];
-    }
-
-    // Image + Text combo
-    if (types.includes("image") && types.includes("text")) {
-      // Image larger, text narrower
-      return ["lg:col-span-7", "lg:col-span-5"];
-    }
-
-    // Default: equal split
-    const span = 12 / row.blocks.length;
-    return Array(row.blocks.length).fill(`lg:col-span-${span}`);
-  }
-
+  // NEW: generic grid layout — no type-specific rules.
   function renderRow(row) {
-    const cols = row.blocks.length;
+    const mode = row.layout?.mode === "container" ? "container" : "prose"; // default: prose
+    const blocks = row.blocks || [];
+    const cols = Math.max(1, blocks.length);
 
-    // Single block row → full width
-    if (cols === 1) {
-      return `<div class="grid grid-cols-1">${renderBlock(row.blocks[0])}</div>`;
-    }
+    // width wrapper: prose rows center on a readable text column
+    const widthWrapOpen =
+      mode === "prose"
+        ? `<div class="mx-auto max-w-prose">`
+        : `<div class="mx-auto">`;
+    const widthWrapClose = `</div>`;
 
-    const types = row.blocks.map(b => b.type);
+    // compute weights -> col spans (12-column grid on lg)
+    const weights = blocks.map(b => {
+      const w = Number(b.weight ?? 1);
+      return Number.isFinite(w) && w > 0 ? w : 1;
+    });
+    const total = weights.reduce((a, b) => a + b, 0) || 1;
+    const spans = weights.map(w => Math.max(1, Math.round((w / total) * 12)));
 
-// Icon + Text → align to prose column (icon hangs in reserved left gutter)
-if (types.includes("icon") && types.includes("text")) {
-  return `
-    <div class="mx-auto max-w-prose">
-      <div class="lg:relative lg:pl-24">
-        <!-- Icon -->
-        <div class="mb-3 flex justify-center lg:mb-0 lg:absolute lg:left-0 lg:top-1 lg:block">
-          ${renderBlock(row.blocks[0])}
-        </div>
-        <!-- Text -->
-        <div>
-          ${renderBlock(row.blocks[1])}
-        </div>
-      </div>
-    </div>`;
-}
-    // Image or MultiImage + Text → flex row
-    if ((types.includes("image") || types.includes("multiImage")) && types.includes("text")) {
-      return `
-        <div class="flex flex-col lg:flex-row gap-6 items-center">
-          <div class="flex-1 flex justify-center">${renderBlock(row.blocks[0])}</div>
-          <div class="flex-1 max-w-md">${renderBlock(row.blocks[1])}</div>
-        </div>`;
-    }
+    // On mobile: stack (1 column). On lg: grid with computed spans.
+    const gridOpen = cols === 1
+      ? `<div class="grid grid-cols-1 gap-6">`
+      : `<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">`;
+    const gridClose = `</div>`;
 
-    // Default = equal grid (safe fallback)
-    const span = 12 / cols;
-    return `
-      <div class="grid grid-cols-1 lg:grid-cols-${cols} gap-6">
-        ${row.blocks.map(b => `<div class="lg:col-span-${span}">${renderBlock(b)}</div>`).join("")}
-      </div>`;
+    const content = blocks.map((b, i) => {
+      const spanCls = cols === 1 ? "" : `lg:col-span-${spans[i]}`;
+      // Center icons by default
+      const alignCls = b.type === "icon" ? "flex justify-center" : "";
+      return `<div class="${spanCls} ${alignCls}">${renderBlock(b)}</div>`;
+    }).join("");
+
+    return widthWrapOpen + gridOpen + content + gridClose + widthWrapClose;
   }
 
   function renderBlock(block) {
@@ -292,21 +258,18 @@ if (types.includes("icon") && types.includes("text")) {
     const wrap = document.createElement("div");
     wrap.className = "space-y-8 animate-fade-in";
 
-const maybeTitle = section.title
-  ? `<div class="mb-6 border-b-2 border-pebbleTeal-200 pb-2">
-       <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-ink">${escapeHtml(section.title)}</h1>
-     </div>`
-  : "";
+    const maybeTitle = section.title
+      ? `<div class="mb-6 border-b-2 border-pebbleTeal-200 pb-2">
+           <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-ink">${escapeHtml(section.title)}</h1>
+         </div>`
+      : "";
 
-
-    wrap.innerHTML = maybeTitle +
-      section.rows.map(renderRow).join("");
+    wrap.innerHTML = maybeTitle + (section.rows || []).map(renderRow).join("");
 
     root.innerHTML = "";
     root.appendChild(wrap);
 
-    section.rows.forEach(hydrateRow);
-
+    (section.rows || []).forEach(hydrateRow);
     renderNav();
   }
 
