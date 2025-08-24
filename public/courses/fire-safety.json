@@ -1,42 +1,49 @@
 {
   "id": "fire-safety",
   "title": "Fire Safety (Demo)",
-  "est_minutes": 10,
+  "est_minutes": 3,
   "sections": [
     {
-      "id": "intro",
+      "id": "welcome",
       "title": "Welcome",
       "rows": [
         {
-          "id": "row1",
-          "blocks": [
-            { "id": "h1", "type": "header", "data": { "text": "Welcome to Fire Safety" } }
-          ]
-        },
-        {
-          "id": "row2",
+          "id": "r1",
+          "width": "prose",
+          "align": "center",
+          "gap": "md",
           "blocks": [
             {
-              "id": "t1",
+              "id": "t-intro",
               "type": "text",
               "data": {
-                "text": "This is a test of a text block with an icon next to it. [[Hopefully everything looks great!]]"
+                "eyebrow": "Introduction",
+                "text": "This is a demo course used to test different block types, we will be adding in new block types as we progress with the test. This is a test of the text block block type.\n\nThis is testing how a new paragraph will appear within the same text block. And this is testing how a very long paragraph might appear. Today is a Sunday, it is the 24th of August 2025. This is a very early version of Pebble, there is a huge amount of work left to do, but for now it is just a fun side project."
               }
             }
           ]
         },
         {
-          "id": "row3",
+          "id": "r2",
+          "width": "prose",
+          "align": "center",
+          "gap": "lg",
           "blocks": [
             {
-              "id": "list1",
-              "type": "list",
+              "id": "i-fire",
+              "type": "icon",
               "data": {
-                "items": [
-                  "List point one",
-                  "List point two",
-                  "List point three"
-                ]
+                "src": "/assets/icons/fire.png",
+                "alt": "Fire icon",
+                "style": "nest",
+                "size": "l"
+              }
+            },
+            {
+              "id": "t-with-icon",
+              "type": "text",
+              "data": {
+                "text": "This is a test of a text block with an icon next to it. Hopefully everything looks great!"
               }
             }
           ]
