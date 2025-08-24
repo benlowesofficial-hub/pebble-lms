@@ -161,7 +161,7 @@ const lis = items
       }
     },
 
-// ----- PREMIUM ACCORDION (with optional eyebrow + hover hint) -----
+    // accordion block type
 accordion: {
   render: (b) => {
     const eyebrow = b.data.eyebrow
@@ -170,52 +170,87 @@ accordion: {
          </div>`
       : "";
 
-    const items = (b.data.tabs || []).map((tab, i) => {
-      const btnId = `${b.id}-btn-${i}`;
-      const panelId = `${b.id}-panel-${i}`;
-      const title = escapeHtml(tab.title);
-      const content = escapeHtml(tab.content || "");
-
-      return `
-        <div class="border-t first:border-t-0 border-border">
-          <button
-            id="${btnId}"
-            class="w-full flex items-center justify-between gap-4 px-4 py-3 md:py-4 text-left font-semibold text-ink hover:bg-pebbleTeal-50 focus:outline-none"
-            aria-expanded="false"
-            aria-controls="${panelId}"
-            data-idx="${i}"
-          >
-            <span class="min-w-0 truncate">${title}</span>
-            <span class="hint-hover shrink-0 transition-transform duration-300 ease-out will-change-transform" aria-hidden="true">
-              <!-- chevron -->
-              <svg class="h-5 w-5 text-inkMuted" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.085l3.71-3.855a.75.75 0 111.08 1.04l-4.24 4.41a.75.75 0 01-1.08 0L5.21 8.27a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
-              </svg>
-            </span>
-          </button>
-          <div
-            id="${panelId}"
-            role="region"
-            aria-labelledby="${btnId}"
-            class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-out"
-          >
-            <div class="px-4 pb-4 text-inkMuted">
-              ${content}
-            </div>
-          </div>
-        </div>
-      `;
-    }).join("");
-
+    // Outer card – rounded, thicker border, clipped overflow so tints never bleed
     return `
-      <div class="mx-auto ${b.data.width === 'container' ? '' : 'max-w-prose'}">
+      <div class="mx-auto max-w-prose">
         ${eyebrow}
-        <div id="${b.id}" class="rounded-xl border-2 border-pebbleTeal-200 bg-white shadow-pebble transition-shadow">
-          ${items}
+        <div id="${b.id}" class="rounded-xl border-2 border-border bg-white shadow-pebble overflow-hidden">
+          ${b.data.tabs.map((tab, i) => `
+            <div class="border-t first:border-t-0 border-border">
+              <button
+                class="group w-full flex items-center justify-between gap-4 px-4 py-3 text-left font-semibold text-ink hover:bg-pebbleTeal-50 transition-colors"
+                data-acc-btn="${tab.id}"
+                aria-expanded="${i === 0 ? "true" : "false"}"
+              >
+                <span class="truncate">${escapeHtml(tab.title)}</span>
+                <span class="relative flex items-center gap-2 text-pebbleTeal-600">
+                  <svg class="h-5 w-5 transition-transform duration-200 ${i === 0 ? "rotate-180" : ""}" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd"/>
+                  </svg>
+                  <span class="h-2 w-2 rounded-full bg-pebbleTeal-600/50 animate-[pulse_1.6s_ease-in-out_infinite]"></span>
+                </span>
+              </button>
+
+              <div
+                class="acc-panel px-4 pb-4 text-inkMuted transition-all duration-300 ease-out overflow-hidden ${i === 0 ? "max-h-40" : "max-h-0"}"
+                data-acc-panel="${tab.id}"
+              >
+                <div class="pt-1">${escapeHtml(tab.content)}</div>
+              </div>
+            </div>
+          `).join("")}
         </div>
       </div>
     `;
   },
+
+  hydrate: (b) => {
+    const root = document.getElementById(b.id);
+    if (!root) return;
+
+    const btns = root.querySelectorAll("[data-acc-btn]");
+    const panels = root.querySelectorAll(".acc-panel");
+
+    // Utility to open/close with smooth height
+    function setOpen(id, open) {
+      const btn = root.querySelector(`[data-acc-btn="${id}"]`);
+      const panel = root.querySelector(`[data-acc-panel="${id}"]`);
+      if (!btn || !panel) return;
+
+      const icon = btn.querySelector("svg");
+
+      if (open) {
+        // measure content height then set max-height for animation
+        panel.style.maxHeight = panel.scrollHeight + "px";
+        btn.setAttribute("aria-expanded", "true");
+        icon?.classList.add("rotate-180");
+      } else {
+        panel.style.maxHeight = "0px";
+        btn.setAttribute("aria-expanded", "false");
+        icon?.classList.remove("rotate-180");
+      }
+    }
+
+    // Close all except first (which is open by default from render)
+    panels.forEach((p, i) => { if (i !== 0) p.style.maxHeight = "0px"; });
+
+    btns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-acc-btn");
+        const isOpen = btn.getAttribute("aria-expanded") === "true";
+
+        // Close all
+        btns.forEach(bn => bn.setAttribute("aria-expanded", "false"));
+        root.querySelectorAll("svg").forEach(svg => svg.classList.remove("rotate-180"));
+        panels.forEach(p => p.style.maxHeight = "0px");
+
+        // Open the clicked one (unless it was open – then it toggles closed)
+        if (!isOpen) setOpen(id, true);
+      });
+    });
+  }
+},
+
 
   hydrate: (b) => {
     const root = document.getElementById(b.id);
