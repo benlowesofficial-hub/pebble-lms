@@ -47,10 +47,45 @@
       render: (b) =>
         `<h2 class="text-[22px] font-extrabold leading-tight">${escapeHtml(b.data.text)}</h2>`
     },
-   text: {
-  render: (b) =>
-    `<p class="text-lg text-ink leading-relaxed">${escapeHtml(b.data.text)}</p>`
-},
+
+    // TEXT BLOCK with: paragraphs, lead para, optional eyebrow, soft highlights
+    text: {
+      render: (b) => {
+        const raw = String(b.data.text || "");
+
+        // 1) Escape HTML to keep things safe
+        let safe = escapeHtml(raw);
+
+        // 2) Soft highlights: [[phrase]] -> span with subtle wash
+        //    Works on the escaped string (brackets remain literal)
+        safe = safe.replace(/\[\[(.+?)\]\]/g, (_m, inner) => {
+          return `<span class="rounded px-1.5 py-0.5 bg-pebbleTeal-50">${inner}</span>`;
+        });
+
+        // 3) Split on double newlines to create paragraphs
+        const parts = safe.split(/\n\s*\n/).filter(Boolean);
+
+        // 4) Build eyebrow (optional)
+        const eyebrow = b.data.eyebrow
+          ? `<div class="mb-2 pl-3 border-l-2 border-pebbleTeal-200">
+               <span class="text-xs uppercase tracking-wide text-inkMuted">${escapeHtml(b.data.eyebrow)}</span>
+             </div>`
+          : "";
+
+        // 5) Render paragraphs; first one is a "lead"
+        const paras = parts.map((p, i) => {
+          const base = "leading-relaxed text-ink";
+          if (i === 0) {
+            return `<p class="${cx(base, "text-xl font-semibold")}">${p}</p>`;
+          }
+          return `<p class="${cx(base, "text-lg")}">${p}</p>`;
+        }).join("");
+
+        // 6) Comfortable rhythm wrapper
+        return `<div class="max-w-prose space-y-5">${eyebrow}${paras}</div>`;
+      }
+    },
+
     icon: {
       render: (b) => {
         const size = b.data.size || "m"; // s | m | l
@@ -180,62 +215,61 @@
   };
 
   // ---------- Row + Section renderers ----------
-function getLayout(row) {
-  const types = row.blocks.map(b => b.type);
+  function getLayout(row) {
+    const types = row.blocks.map(b => b.type);
 
-  // Icon + Text combo
-  if (types.includes("icon") && types.includes("text")) {
-    // Icon smaller, text wider
-    return ["lg:col-span-4 flex justify-center", "lg:col-span-8"];
+    // Icon + Text combo
+    if (types.includes("icon") && types.includes("text")) {
+      // Icon smaller, text wider
+      return ["lg:col-span-4 flex justify-center", "lg:col-span-8"];
+    }
+
+    // Image + Text combo
+    if (types.includes("image") && types.includes("text")) {
+      // Image larger, text narrower
+      return ["lg:col-span-7", "lg:col-span-5"];
+    }
+
+    // Default: equal split
+    const span = 12 / row.blocks.length;
+    return Array(row.blocks.length).fill(`lg:col-span-${span}`);
   }
 
-  // Image + Text combo
-  if (types.includes("image") && types.includes("text")) {
-    // Image larger, text narrower
-    return ["lg:col-span-7", "lg:col-span-5"];
-  }
+  function renderRow(row) {
+    const cols = row.blocks.length;
 
-  // Default: equal split
-  const span = 12 / row.blocks.length;
-  return Array(row.blocks.length).fill(`lg:col-span-${span}`);
-}
+    // Single block row → full width
+    if (cols === 1) {
+      return `<div class="grid grid-cols-1">${renderBlock(row.blocks[0])}</div>`;
+    }
 
-function renderRow(row) {
-  const cols = row.blocks.length;
+    const types = row.blocks.map(b => b.type);
 
-  // Single block row → full width
-  if (cols === 1) {
-    return `<div class="grid grid-cols-1">${renderBlock(row.blocks[0])}</div>`;
-  }
+    // Icon + Text → flex row
+    if (types.includes("icon") && types.includes("text")) {
+      return `
+        <div class="flex flex-col lg:flex-row gap-6 items-center">
+          <div class="flex-shrink-0 flex justify-center">${renderBlock(row.blocks[0])}</div>
+          <div class="flex-1 max-w-prose">${renderBlock(row.blocks[1])}</div>
+        </div>`;
+    }
 
-  const types = row.blocks.map(b => b.type);
+    // Image or MultiImage + Text → flex row
+    if ((types.includes("image") || types.includes("multiImage")) && types.includes("text")) {
+      return `
+        <div class="flex flex-col lg:flex-row gap-6 items-center">
+          <div class="flex-1 flex justify-center">${renderBlock(row.blocks[0])}</div>
+          <div class="flex-1 max-w-md">${renderBlock(row.blocks[1])}</div>
+        </div>`;
+    }
 
-  // Icon + Text → flex row
-  if (types.includes("icon") && types.includes("text")) {
+    // Default = equal grid (safe fallback)
+    const span = 12 / cols;
     return `
-      <div class="flex flex-col lg:flex-row gap-6 items-center">
-        <div class="flex-shrink-0 flex justify-center">${renderBlock(row.blocks[0])}</div>
-        <div class="flex-1 max-w-prose">${renderBlock(row.blocks[1])}</div>
+      <div class="grid grid-cols-1 lg:grid-cols-${cols} gap-6">
+        ${row.blocks.map(b => `<div class="lg:col-span-${span}">${renderBlock(b)}</div>`).join("")}
       </div>`;
   }
-
-  // Image or MultiImage + Text → flex row
-  if ((types.includes("image") || types.includes("multiImage")) && types.includes("text")) {
-    return `
-      <div class="flex flex-col lg:flex-row gap-6 items-center">
-        <div class="flex-1 flex justify-center">${renderBlock(row.blocks[0])}</div>
-        <div class="flex-1 max-w-md">${renderBlock(row.blocks[1])}</div>
-      </div>`;
-  }
-
-  // Default = equal grid (safe fallback)
-  const span = 12 / cols;
-  return `
-    <div class="grid grid-cols-1 lg:grid-cols-${cols} gap-6">
-      ${row.blocks.map(b => `<div class="lg:col-span-${span}">${renderBlock(b)}</div>`).join("")}
-    </div>`;
-}
-
 
   function renderBlock(block) {
     const entry = registry[block.type];
