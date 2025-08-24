@@ -24,6 +24,17 @@
           ]
         },
         {
+          "id": "r-divider-before",
+          "width": "prose",
+          "blocks": [
+            {
+              "id": "div-before",
+              "type": "divider",
+              "data": {}
+            }
+          ]
+        },
+        {
           "id": "r2",
           "width": "prose",
           "align": "center",
@@ -45,6 +56,17 @@
               "data": {
                 "text": "This is a test of a text block with an icon next to it. [[Hopefully everything looks great!]]"
               }
+            }
+          ]
+        },
+        {
+          "id": "r-divider-after",
+          "width": "prose",
+          "blocks": [
+            {
+              "id": "div-after",
+              "type": "divider",
+              "data": {}
             }
           ]
         },
