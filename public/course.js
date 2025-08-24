@@ -286,7 +286,7 @@ text: {
     wrap.className = "space-y-8 animate-fade-in";
 
 const maybeTitle = section.title
-  ? `<div class="mb-6 bg-pebbleTeal-50 border border-pebbleTeal-100 rounded-lg px-4 py-3">
+  ? `<div class="mb-6 border-b-2 border-pebbleTeal-200 pb-2">
        <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-ink">${escapeHtml(section.title)}</h1>
      </div>`
   : "";
