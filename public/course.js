@@ -1,5 +1,4 @@
-
-// /public/course.js  (core runtime)
+// /public/course.js  (core runtime as an ES module)
 import { escapeHtml } from "./js/utils.js";
 import { registry }   from "./js/block-registry.js";
 
@@ -167,6 +166,6 @@ import { registry }   from "./js/block-registry.js";
   // initial render
   renderSection(course.sections[current]);
 })();
-</script>
+
 
 
