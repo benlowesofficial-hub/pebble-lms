@@ -1,4 +1,4 @@
-<script type="module">
+
 // /public/course.js  (core runtime)
 import { escapeHtml } from "./js/utils.js";
 import { registry }   from "./js/block-registry.js";
